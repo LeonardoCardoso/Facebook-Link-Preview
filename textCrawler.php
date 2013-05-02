@@ -1,6 +1,14 @@
 <?php
+/* 
+* Copyright (c) 2012 Leonardo Cardoso (http://leocardz.com)
+* Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+* and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+*
+* Version: 0.2.17
+* 
+*/
 
-	header("Content-Type: text/html; charset=ISO-8859-1", true);
+	header("Content-Type: text/html; charset=utf-8", true);
 	error_reporting(false);
 	
 	$urlOpen = false;
@@ -9,18 +17,13 @@
 		ini_set('allow_url_fopen', 1);
 	}
 	
-	function utf8Fix($msg){
-		$accents = array("á", "à", "â", "ã", "ä", "é", "è", "ê", "ë", "í", "ì", "î", "ï", "ó", "ò", "ô", "õ", "ö", "ú", "ù", "û", "ü", "ç", "Á", "À", "Â", "Ã", "Ä", "É", "È", "Ê", "Ë", "Í", "Ì", "Î", "Ï", "Ó", "Ò", "Ô", "Õ", "Ö", "Ú", "Ù", "Û", "Ü", "Ç");
-		$utf8 = array("Ã¡","Ã ","Ã¢","Ã£","Ã¤","Ã©","Ã¨","Ãª","Ã«","Ã­","Ã¬","Ã®","Ã¯","Ã³","Ã²","Ã´","Ãµ","Ã¶","Ãº","Ã¹","Ã»","Ã¼","Ã§","Ã","Ã€","Ã‚","Ãƒ","Ã„","Ã‰","Ãˆ","ÃŠ","Ã‹","Ã","ÃŒ","Ã","Ã","Ã“","Ã’","Ã”","Ã•","Ã–","Ãš","Ã™","Ã›","Ãœ","Ã‡");
-		$fix = str_replace($utf8, $accents, $msg);
-		return $fix;
-	}
-	
 	$text = $_GET["text"];
 	$text = " ".str_replace("\n", " ", $text);
 	$urlRegex = "/(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z0-9_.\:\;-]*)*(\?[\&\%\|\+a-z0-9_=,\.\:\;-]*)?([\&\%\|\+&a-z0-9_=,\:\;\.-]*)([\!\#\/\&\%\|\+a-z0-9_=,\:\;\.-]*)}*/i";
 	
 	function getPage($url, $referer, $timeout, $header = ""){
+		// php5-curl must be installed and enabled
+		
 		/*
 		if(!isset($timeout))
 		$timeout = 30;
@@ -233,7 +236,7 @@
 		$images = "";
 		for($i = 0; $i < count($content); $i++){
 			$size = getimagesize($content[$i]);
-			if($size[0] > 100 && $size[1] > 15) $images .= $content[$i]."|";
+			if($size[0] > 100 && $size[1] > 15)  $images .= $content[$i]."|";
 		}
 		return substr($images, 0, -1);
 	}
@@ -324,17 +327,14 @@
 		
 		$description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
 		
-		$title = utf8Fix($title);
-		$description = utf8Fix($description);
-		
 		$answer = array(
 			"title" => $title,
-			"titleEsc" => htmlentities($title),
+			"titleEsc" => $title,
 			"url" => $finalLink,
 			"pageUrl" => $finalUrl,
 			"cannonicalUrl" => cannonicalPage($pageUrl),
 			"description" => strip_tags($description),
-			"descriptionEsc" => htmlentities(strip_tags($description)),
+			"descriptionEsc" => strip_tags($description),
 			"images" => $images,
 			"video" => $video,
 			"videoIframe" => $videoIframe
@@ -349,3 +349,4 @@
 	}
 
 ?>
+
