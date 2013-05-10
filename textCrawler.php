@@ -254,6 +254,43 @@
 		else $content = $contentParagraph;
 		return $content;
 	}
+
+	function getMetaTags($contents){
+	    $result = false;
+
+	    if (isset($contents))
+	    {
+		$metaTags = null;
+		
+		preg_match('/<title>([^>]*)<\/title>/si', $contents, $match );
+		
+		preg_match_all('/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $contents, $match);
+		
+		if (isset($match) && is_array($match) && count($match) == 3)
+		{
+		    $originals = $match[0];
+		    $names = $match[1];
+		    $values = $match[2];
+		    
+		    if (count($originals) == count($names) && count($names) == count($values))
+		    {
+		        $metaTags = array();
+		        
+		        for ($i=0, $limiti=count($names); $i < $limiti; $i++)
+		        {
+		            $metaTags[$names[$i]] = array (
+		                'html' => htmlentities($originals[$i]),
+		                'value' => $values[$i]
+		            );
+		        }
+		    }
+		}
+		
+		$result = $metaTags;
+	    }
+	    
+	    return $result;
+	}
 	
 	if(preg_match($urlRegex, $text, $match)){
 		$raw = "";
@@ -267,35 +304,46 @@
 		$finalUrl = $match[0];
 		$pageUrl = str_replace("https://", "http://", $finalUrl);
 		$urlData = getPage($pageUrl);
+		if(!$urlData["content"] && strpos($pageUrl, "//www.") === false){
+			if(strpos($pageUrl, "http://") !== false) $pageUrl = str_replace("http://", "http://www.", $pageUrl);
+			elseif(strpos($pageUrl, "https://") !== false) $pageUrl = str_replace("https://", "https://www.", $pageUrl);
+	
+			$urlData = getPage($pageUrl);
+		}
+
 		$pageUrl = $finalUrl = $urlData["url"];
 		$raw = $urlData["content"];
 		
-		//if(!($raw = file_get_contents($pageUrl))) $raw = getPage($pageUrl, 'http://google.com', '30');
-		$metaTags = get_meta_tags($pageUrl);
+		$metaTags = getMetaTags($raw);
 		
-		if(isset($metaTags['title'])){
-			$title = $metaTags['title'];
-		}
-		else{
-			$title = getOpenGraphicContent("og:title", $raw);
-			if($title == ""){
-				if(preg_match("/<title(.*?)>(.*?)<\/title>/i", str_replace("\n", " ", $raw), $matching)) $title = $matching[2];
-				$titleAnalysis = " ".strtolower($title);
-				if($title == "" || (strpos($titleAnalysis, "404") !== false && strpos($titleAnalysis, "not found") !== false && strpos($titleAnalysis, "error") !== false)) $title = $match[0];
-				if(strpos($titleAnalysis, "navegador incomp") !== false || strpos($titleAnalysis, "browser not compatible") !== false) $title = "Facebook";
-			}
-		}
-		
-		$description = getOpenGraphicContent("og:description", $raw);
-		if($description == ""){
-			if(isset($metaTags['description'])){
-				$description = $metaTags['description'];
-				$descriptionUnderstood = true;
+		foreach($metaTags as $metaTag){
+			if(strpos($metaTag["html"], "title") !== false){
+				$title = $metaTag["value"];
 			}
 			else{
-				$description = crawCode($raw);
+				$title = getOpenGraphicContent("og:title", $raw);
+				if($title == ""){
+					if(preg_match("/<title(.*?)>(.*?)<\/title>/i", str_replace("\n", " ", $raw), $matching)) $title = $matching[2];
+					$titleAnalysis = " ".strtolower($title);
+					if($title == "" || (strpos($titleAnalysis, "404") !== false && strpos($titleAnalysis, "not found") !== false && strpos($titleAnalysis, "error") !== false)) $title = $match[0];
+					if(strpos($titleAnalysis, "navegador incomp") !== false || strpos($titleAnalysis, "browser not compatible") !== false) $title = "Facebook";
+				}
+			}
+
+			if($description == ""){
+				$description = getOpenGraphicContent("og:description", $raw);
+				if($description == ""){
+					if(strpos($metaTag["html"], "description") !== false){
+						$description = $metaTag["value"];
+						$descriptionUnderstood = true;
+					}
+					else{
+						$description = crawCode($raw);
+					}
+				}
 			}
 		}
+
 		if(($descriptionUnderstood == false && strlen($title) > strlen($description) && !preg_match($urlRegex, $description) && $description != "" && !preg_match('/[A-Z]/', $description)) || $title == $description){
 			$title = $description;
 			$description = crawCode($raw);
