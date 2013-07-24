@@ -289,96 +289,118 @@ function getMetaTags($contents) {
 	return $result;
 }
 
+function isImage($url) {
+	if (preg_match("/\.(jpg|png|gif|bmp)$/i", $url))
+		return true;
+	else
+		return false;
+}
+
 if (preg_match($urlRegex, $text, $match)) {
+
 	$raw = "";
 	$title = "";
 	$images = "";
 	$description = "";
 	$videoIframe = "";
 	$titleAnalysis = "";
+	$finalUrl = "";
+	$finalLink = "";
 	$video = "no";
+
 	if (strpos($match[0], " ") === 0)
 		$match[0] = "http://" . substr($match[0], 1);
+
 	$finalUrl = $match[0];
 	$pageUrl = str_replace("https://", "http://", $finalUrl);
-	$urlData = getPage($pageUrl);
-	if (!$urlData["content"] && strpos($pageUrl, "//www.") === false) {
-		if (strpos($pageUrl, "http://") !== false)
-			$pageUrl = str_replace("http://", "http://www.", $pageUrl);
-		elseif (strpos($pageUrl, "https://") !== false)
-			$pageUrl = str_replace("https://", "https://www.", $pageUrl);
 
+	if (isImage($pageUrl)) {
+
+		$images = $pageUrl;
+		$finalLink = explode("&", $finalUrl);
+		$finalLink = $finalLink[0];
+
+	} else {
 		$urlData = getPage($pageUrl);
-	}
+		if (!$urlData["content"] && strpos($pageUrl, "//www.") === false) {
+			if (strpos($pageUrl, "http://") !== false)
+				$pageUrl = str_replace("http://", "http://www.", $pageUrl);
+			elseif (strpos($pageUrl, "https://") !== false)
+				$pageUrl = str_replace("https://", "https://www.", $pageUrl);
 
-	$pageUrl = $finalUrl = $urlData["url"];
-	$raw = $urlData["content"];
-
-	$metaTags = getMetaTags($raw);
-
-	foreach ($metaTags as $metaTag) {
-		if (strpos($metaTag["html"], "title") !== false) {
-			$title = $metaTag["value"];
-		} else {
-			$title = getOpenGraphicContent("og:title", $raw);
-			if ($title == "") {
-				if (preg_match("/<title(.*?)>(.*?)<\/title>/i", str_replace("\n", " ", $raw), $matching))
-					$title = $matching[2];
-				$titleAnalysis = " " . strtolower($title);
-				if ($title == "" || (strpos($titleAnalysis, "404") !== false && strpos($titleAnalysis, "not found") !== false && strpos($titleAnalysis, "error") !== false))
-					$title = $match[0];
-				if (strpos($titleAnalysis, "navegador incomp") !== false || strpos($titleAnalysis, "browser not compatible") !== false)
-					$title = "Facebook";
-			}
+			$urlData = getPage($pageUrl);
 		}
 
-		if ($description == "") {
-			$description = getOpenGraphicContent("og:description", $raw);
+		$pageUrl = $finalUrl = $urlData["url"];
+		$raw = $urlData["content"];
+
+		$metaTags = getMetaTags($raw);
+
+		foreach ($metaTags as $metaTag) {
+			if (strpos($metaTag["html"], "title") !== false) {
+				$title = $metaTag["value"];
+			} else {
+				$title = getOpenGraphicContent("og:title", $raw);
+				if ($title == "") {
+					if (preg_match("/<title(.*?)>(.*?)<\/title>/i", str_replace("\n", " ", $raw), $matching))
+						$title = $matching[2];
+					$titleAnalysis = " " . strtolower($title);
+					if ($title == "" || (strpos($titleAnalysis, "404") !== false && strpos($titleAnalysis, "not found") !== false && strpos($titleAnalysis, "error") !== false))
+						$title = $match[0];
+					if (strpos($titleAnalysis, "navegador incomp") !== false || strpos($titleAnalysis, "browser not compatible") !== false)
+						$title = "Facebook";
+				}
+			}
+
 			if ($description == "") {
-				if (strpos($metaTag["html"], "description") !== false) {
-					$description = $metaTag["value"];
-					$descriptionUnderstood = true;
-				} else {
-					$description = crawCode($raw);
+				$description = getOpenGraphicContent("og:description", $raw);
+				if ($description == "") {
+					if (strpos($metaTag["html"], "description") !== false) {
+						$description = $metaTag["value"];
+						$descriptionUnderstood = true;
+					} else {
+						$description = crawCode($raw);
+					}
 				}
 			}
 		}
+
+		if (($descriptionUnderstood == false && strlen($title) > strlen($description) && !preg_match($urlRegex, $description) && $description != "" && !preg_match('/[A-Z]/', $description)) || $title == $description) {
+			$title = $description;
+			$description = crawCode($raw);
+		}
+		$images = getOpenGraphicContent("og:image", $raw);
+		$media = array();
+
+		if (strpos($pageUrl, "youtube.com") !== false) {
+			$media = mediaYoutube($pageUrl);
+			$images = $media[0];
+			$videoIframe = $media[1];
+		} else if (strpos($pageUrl, "vimeo.com") !== false) {
+			$media = mediaVimeo($pageUrl);
+			$images = $media[0];
+			$videoIframe = $media[1];
+		}
+		if ($images == "") {
+			$images = getImages($raw, $pageUrl);
+		}
+		if ($media != null && $media[0] != "" && $media[1] != "")
+			$video = "yes";
+
+		$title = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $title))));
+		$pageUrl = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $pageUrl))));
+		$description = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $description))));
+
+		$finalLink = explode("&", $finalUrl);
+		$finalLink = $finalLink[0];
+
+		$description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
+
 	}
 
-	if (($descriptionUnderstood == false && strlen($title) > strlen($description) && !preg_match($urlRegex, $description) && $description != "" && !preg_match('/[A-Z]/', $description)) || $title == $description) {
-		$title = $description;
-		$description = crawCode($raw);
-	}
-	$images = getOpenGraphicContent("og:image", $raw);
-	$media = array();
-
-	if (strpos($pageUrl, "youtube.com") !== false) {
-		$media = mediaYoutube($pageUrl);
-		$images = $media[0];
-		$videoIframe = $media[1];
-	} else if (strpos($pageUrl, "vimeo.com") !== false) {
-		$media = mediaVimeo($pageUrl);
-		$images = $media[0];
-		$videoIframe = $media[1];
-	}
-	if ($images == "") {
-		$images = getImages($raw, $pageUrl);
-	}
-	if ($media != null && $media[0] != "" && $media[1] != "")
-		$video = "yes";
-
-	$title = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $title))));
-	$pageUrl = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $pageUrl))));
-	$description = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $description))));
-
-	$finalLink = explode("&", $finalUrl);
-	$finalLink = $finalLink[0];
-
-	$description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
-
-	if($title == "")
+	if ($title == "")
 		$title = "Title";
-	if($description == "")
+	if ($description == "")
 		$description = "Description";
 
 	$answer = array("title" => $title, "titleEsc" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "cannonicalUrl" => cannonicalPage($pageUrl), "description" => strip_tags($description), "descriptionEsc" => strip_tags($description), "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
