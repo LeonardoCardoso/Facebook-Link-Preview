@@ -374,7 +374,7 @@
 			title = $('#previewTitle').html();
 			description = $('#previewDescription').html();
 
-			if ((trim(text) !== "" && endOfCrawling === true) && (allowPosting === true && isCrawling === false)) {
+			if (((trim(text) !== "" && endOfCrawling === true) || (trim(text) === "" && trim(hrefUrl) !== "")) && (allowPosting === true && isCrawling === false)) {
 				$.get('searchUrls.php', {
 					text : text,
 					description : description
