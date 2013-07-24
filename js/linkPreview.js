@@ -342,6 +342,10 @@
 						});
 						$('#closePreview').click(function() {
 							block = false;
+							hrefUrl = '';
+							fancyUrl = '';
+							images = '';
+							video = '';
 							$('#preview').fadeOut("fast", function() {
 								$('#text').css({
 									"border" : "1px solid #b3b3b3",
@@ -352,6 +356,7 @@
 								$('#previewUrl').html("");
 								$('#previewDescription').html("");
 							});
+							
 						});
 						if (firstPosting === false) {
 							firstPosting = true;
