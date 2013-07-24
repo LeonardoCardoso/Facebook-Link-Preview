@@ -26,7 +26,7 @@
 				</div>
 				<div id="preview">
 					<div id="previewImages">
-						<div id="previewImage"><img src='img/loader.gif' style='margin-left: 43%; margin-top: 39%;' ></img>
+						<div id="previewImage"><img src="img/loader.gif" style="margin-left: 43%; margin-top: 39%;" ></img>
 						</div>
 						<input type="hidden" id="photoNumber" value="0" />
 					</div>
@@ -37,7 +37,7 @@
 						<div id="previewDescription"></div>
 						<div id="hiddenDescription"></div>
 						<div id="previewButtons" >
-							<div id='previewPreviousImg' class="buttonLeftDeactive" ></div><div id='previewNextImg' class="buttonRightDeactive"  ></div>
+							<div id="previewPreviousImg" class="buttonLeftDeactive" ></div><div id="previewNextImg" class="buttonRightDeactive"  ></div>
 							<div class="photoNumbers" ></div>
 							<div class="chooseThumbnail">
 								Choose a thumbnail
