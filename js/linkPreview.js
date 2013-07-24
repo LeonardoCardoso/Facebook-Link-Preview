@@ -39,7 +39,7 @@
 		var pDP = "";
 		var fancyUrl = '';
 
-		var textText = "What's on your mind?";
+		var textText = "";
 		$('#text').focus(function() {
 			if (trim($('#text').val()) === textText) {
 				$(this).val('');
@@ -363,10 +363,10 @@
 			text = " " + $('#text').val();
 			title = $('#previewTitle').html();
 			description = $('#previewDescription').html();
-			if (text === "What's on your mind?") {
-				text = "";
+
+			if (text === "")
 				allowPosting = true;
-			}
+
 			if ((trim(text) !== "" && endOfCrawling === true) || allowPosting === true) {
 				$.get('searchUrls.php', {
 					text : text,
