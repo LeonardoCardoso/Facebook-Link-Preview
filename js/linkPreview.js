@@ -33,7 +33,6 @@
 		var firstPosted = false;
 		var firstPosting = false;
 		var nT = false;
-		var endOfCrawling = true;
 		var imageId = "";
 		var pTP = "";
 		var pDP = "";
@@ -343,7 +342,6 @@
 						});
 						$('#closePreview').click(function() {
 							block = false;
-							endOfCrawling = false;
 							$('#preview').fadeOut("fast", function() {
 								$('#text').css({
 									"border" : "1px solid #b3b3b3",
@@ -355,7 +353,6 @@
 								$('#previewDescription').html("");
 							});
 						});
-						endOfCrawling = true;
 						if (firstPosting === false) {
 							firstPosting = true;
 						}
@@ -374,7 +371,7 @@
 			title = $('#previewTitle').html();
 			description = $('#previewDescription').html();
 
-			if (((trim(text) !== "" && endOfCrawling === true) || (trim(text) === "" && trim(hrefUrl) !== "")) && (allowPosting === true && isCrawling === false)) {
+			if (((trim(text) !== "") || (trim(text) === "" && trim(hrefUrl) !== "")) && (allowPosting === true && isCrawling === false)) {
 				$.get('searchUrls.php', {
 					text : text,
 					description : description
