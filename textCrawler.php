@@ -399,9 +399,9 @@ if (preg_match($urlRegex, $text, $match)) {
 	}
 
 	if ($title == "")
-		$title = "Title";
+		$title = "Enter a Title";
 	if ($description == "")
-		$description = "Description";
+		$description = "Enter a Description";
 
 	$answer = array("title" => $title, "titleEsc" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "cannonicalUrl" => cannonicalPage($pageUrl), "description" => strip_tags($description), "descriptionEsc" => strip_tags($description), "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
 
