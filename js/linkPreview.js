@@ -38,6 +38,8 @@
 		var pTP = "";
 		var pDP = "";
 		var fancyUrl = '';
+		var allowPosting = false;
+		var isCrawling = false;
 
 		var textText = "";
 		$('#text').focus(function() {
@@ -82,6 +84,9 @@
 
 
 		$('#text').keyup(function(e) {
+
+			allowPosting = true;
+
 			if ((e.which === 13 || e.which === 32 || e.which === 17) && trim($(this).val()) !== "") {
 				text = " " + $('#text').val();
 				video = "no";
@@ -92,6 +97,10 @@
 					$('#previewButtons').hide();
 					$('#previewLoading').html("<img src='img/loader.gif' ></img>");
 					$('#photoNumber').val(0);
+
+					allowPosting = false;
+					isCrawling = true;
+
 					$.get('textCrawler.php', {
 						text : text
 					}, function(answer) {
@@ -350,13 +359,14 @@
 						if (firstPosting === false) {
 							firstPosting = true;
 						}
+						allowPosting = true;
+						isCrawling = false;
 					}, "json");
 				}
 			}
 		});
 
 		$('#postPreview').click(function() {
-			var allowPosting = false;
 			imageId = "";
 			pTP = "";
 			pDP = "";
@@ -364,10 +374,7 @@
 			title = $('#previewTitle').html();
 			description = $('#previewDescription').html();
 
-			if (text === "")
-				allowPosting = true;
-
-			if ((trim(text) !== "" && endOfCrawling === true) || allowPosting === true) {
+			if ((trim(text) !== "" && endOfCrawling === true) && (allowPosting === true && isCrawling === false)) {
 				$.get('searchUrls.php', {
 					text : text,
 					description : description
