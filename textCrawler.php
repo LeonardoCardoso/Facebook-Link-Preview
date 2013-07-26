@@ -17,6 +17,7 @@ if (!ini_get('allow_url_fopen')) {
 }
 
 $text = $_GET["text"];
+$imageQuantity = $_GET["imagequantity"];
 $text = " " . str_replace("\n", " ", $text);
 $urlRegex = "/(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z0-9_.\:\;-]*)*(\?[\&\%\|\+a-z0-9_=,\.\:\;-]*)?([\&\%\|\+&a-z0-9_=,\:\;\.-]*)([\!\#\/\&\%\|\+a-z0-9_=,\:\;\.-]*)}*/i";
 
@@ -202,9 +203,10 @@ function joinAll($matching, $number, $url, $content) {
 	return $content;
 }
 
-function getImages($text, $url) {
+function getImages($text, $url, $imageQuantity) {
 	$content = array();
 	if (preg_match_all("/<img(.*?)src=(\"|\')(.+?)(gif|jpg|png|bmp)(\"|\')(.*?)(\/)?>(<\/img>)?/", $text, $matching)) {
+
 		for ($i = 0; $i < count($matching[0]); $i++) {
 			$src = "";
 			$pathCounter = substr_count($matching[0][$i], "../");
@@ -233,11 +235,18 @@ function getImages($text, $url) {
 	}
 	$content = array_unique($content);
 	$content = array_values($content);
+
+	$maxImages = $imageQuantity != -1 && $imageQuantity < count($content) ? $imageQuantity : count($content);
+
 	$images = "";
 	for ($i = 0; $i < count($content); $i++) {
 		$size = getimagesize($content[$i]);
-		if ($size[0] > 100 && $size[1] > 15)
+		if ($size[0] > 100 && $size[1] > 15) {// avoids getting very small images
 			$images .= $content[$i] . "|";
+			$maxImages--;
+			if ($maxImages == 0)
+				break;
+		}
 	}
 	return substr($images, 0, -1);
 }
@@ -382,7 +391,7 @@ if (preg_match($urlRegex, $text, $match)) {
 			$videoIframe = $media[1];
 		}
 		if ($images == "") {
-			$images = getImages($raw, $pageUrl);
+			$images = getImages($raw, $pageUrl, $imageQuantity);
 		}
 		if ($media != null && $media[0] != "" && $media[1] != "")
 			$video = "yes";
