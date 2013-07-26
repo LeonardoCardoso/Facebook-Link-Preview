@@ -7,7 +7,12 @@
  *
  */
 (function($) {
-	$.fn.linkPreview = function() {
+	$.fn.linkPreview = function(options) {
+		var defaults = {
+			imageQuantity : -1 // ilimited
+		}
+		var opts = jQuery.extend(defaults, options);
+
 		function trim(str) {
 			return str.replace(/^\s+|\s+$/g, "");
 		}
@@ -101,7 +106,7 @@
 					isCrawling = true;
 
 					$.get('textCrawler.php', {
-						text : text
+						text : text, imagequantity: opts.imageQuantity 
 					}, function(answer) {
 						if (answer.url === null)
 							answer.url = "";
@@ -356,7 +361,7 @@
 								$('#previewUrl').html("");
 								$('#previewDescription').html("");
 							});
-							
+
 						});
 						if (firstPosting === false) {
 							firstPosting = true;
