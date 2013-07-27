@@ -9,7 +9,7 @@
 (function($) {
 	$.fn.linkPreview = function(options) {
 		var defaults = {
-			imageQuantity : -1 // ilimited
+			imageQuantity : -1 // illimited
 		}
 		var opts = jQuery.extend(defaults, options);
 
@@ -106,7 +106,8 @@
 					isCrawling = true;
 
 					$.get('textCrawler.php', {
-						text : text, imagequantity: opts.imageQuantity 
+						text : text,
+						imagequantity : opts.imageQuantity
 					}, function(answer) {
 						if (answer.url === null)
 							answer.url = "";
@@ -116,10 +117,10 @@
 							answer.title = answer.titleEsc;
 						if (answer.description === null)
 							answer.description = answer.descriptionEsc;
-						if (answer.title === null)
-							answer.title = "";
-						if (answer.description === null)
-							answer.description = "";
+						if (answer.title === null || answer.title === "")
+							answer.title = "Enter a title";
+						if (answer.description === null || answer.description === "")
+							answer.description = "Enter a description";
 						if (answer.cannonicalUrl === null)
 							answer.cannonicalUrl = "";
 						if (answer.images === null)
@@ -136,6 +137,7 @@
 							"border" : "1px solid #b3b3b3",
 							"border-bottom" : "1px dashed #b3b3b3"
 						});
+
 						$('#previewUrl').html(answer.url);
 						$('#previewDescription').html("<span id='previewSpanDescription' >" + answer.description + "</span><textarea id='previewInputDescription' style='width: 290px; display: none;' class='inputPreview' >" + answer.description + "</textarea>");
 						title = "<a href='" + answer.pageUrl + "' target='_blank'>" + $('#previewTitle').html() + "</a>";
@@ -382,7 +384,7 @@
 			description = $('#previewDescription').html();
 
 			if (((trim(text) !== "") || (trim(text) === "" && trim(hrefUrl) !== "")) && (allowPosting === true && isCrawling === false)) {
-				$.get('searchUrls.php', {
+				$.get('highlightUrls.php', {
 					text : text,
 					description : description
 				}, function(urls) {
