@@ -243,7 +243,7 @@ function getImages($text, $url, $imageQuantity) {
 	return substr($images, 0, -1);
 }
 
-function crawCode($text) {
+function crawlCode($text) {
 	$content = "";
 	$contentSpan = "";
 	$contentParagraph = "";
@@ -262,8 +262,7 @@ function crawCode($text) {
 
 function separeMetaTagsContent($raw) {
 	preg_match('/content="(.*?)"/i', $raw, $match);
-	return $match[1];
-	// htmlentities($match[1]);
+	return  htmlentities($match[1]);
 }
 
 function getMetaTags($contents) {
@@ -288,7 +287,6 @@ function getMetaTags($contents) {
 
 		$result = $metaTags;
 	}
-
 	return $result;
 }
 
@@ -336,7 +334,6 @@ if (preg_match($urlRegex, $text, $match)) {
 		$pageUrl = $finalUrl = $urlData["url"];
 		$raw = $urlData["content"];
 
-		// Estou aqui <--
 		$metaTags = getMetaTags($raw);
 
 		$tempTitle = trim($metaTags["title"]);
@@ -352,14 +349,14 @@ if (preg_match($urlRegex, $text, $match)) {
 		if ($tempDescription != "")
 			$description = $tempDescription;
 		else
-			$description = crawCode($raw);
+			$description = crawlCode($raw);
 
 		if ($description != "")
 			$descriptionUnderstood = true;
 
 		if (($descriptionUnderstood == false && strlen($title) > strlen($description) && !preg_match($urlRegex, $description) && $description != "" && !preg_match('/[A-Z]/', $description)) || $title == $description) {
 			$title = $description;
-			$description = crawCode($raw);
+			$description = crawlCode($raw);
 		}
 
 		$images = trim($metaTags["image"]);
