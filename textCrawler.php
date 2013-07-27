@@ -81,20 +81,6 @@ function getTagContent($tag, $string) {
 	return str_replace("&nbsp;", "", $content);
 }
 
-function getOpenGraphicContent($property, $text) {
-	$content = "";
-	if (preg_match('/<meta(.*?)property="' . $property . '"(.*?)content="(.+?)"(.*?)(\/)?>/', $text, $matching)) {
-		$content = $matching[3];
-	} else if (preg_match('/<meta(.*?)content="(.+?)"(.*?)property="' . $property . '"(.*?)(\/)?>/', $text, $matching)) {
-		$content = $matching[2];
-	} else if (preg_match("/<meta(.*?)property='$property'(.*?)content='(.+?)'(.*?)(\/)?>/", $text, $matching)) {
-		$content = $matching[3];
-	} else if (preg_match("/<meta(.*?)content='(.+?)'(.*?)property='$property'(.*?)(\/)?>/", $text, $matching)) {
-		$content = $matching[2];
-	}
-	return $content;
-}
-
 function mediaYoutube($url) {
 	$media = array();
 	if (preg_match("/(.*?)v=(.*?)($|&)/i", $url, $matching)) {
@@ -159,16 +145,22 @@ function cannonicalRefererPage($url) {
 
 function cannonicalPage($url) {
 	$cannonical = "";
+
+	if (substr_count($url, 'http://') > 1 || substr_count($url, 'https://') > 1 || (strpos($url, 'http://') !== false && strpos($url, 'https://') !== false))
+		return $url;
+
 	if (strpos($url, "http://") !== false)
 		$url = substr($url, 7);
 	else if (strpos($url, "https://") !== false)
 		$url = substr($url, 8);
+
 	for ($i = 0; $i < strlen($url); $i++) {
 		if ($url[$i] != "/")
 			$cannonical .= $url[$i];
 		else
 			break;
 	}
+
 	return $cannonical;
 }
 
@@ -268,28 +260,30 @@ function crawCode($text) {
 	return $content;
 }
 
+function separeMetaTagsContent($raw) {
+	preg_match('/content="(.*?)"/i', $raw, $match);
+	return $match[1];
+	// htmlentities($match[1]);
+}
+
 function getMetaTags($contents) {
 	$result = false;
+	$metaTags = array("url" => "", "title" => "", "description" => "", "image" => "");
 
 	if (isset($contents)) {
-		$metaTags = null;
 
-		preg_match('/<title>([^>]*)<\/title>/si', $contents, $match);
+		preg_match_all('/<meta(.*?)>/i', $contents, $match);
 
-		preg_match_all('/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $contents, $match);
+		foreach ($match[1] as $value) {
 
-		if (isset($match) && is_array($match) && count($match) == 3) {
-			$originals = $match[0];
-			$names = $match[1];
-			$values = $match[2];
-
-			if (count($originals) == count($names) && count($names) == count($values)) {
-				$metaTags = array();
-
-				for ($i = 0, $limiti = count($names); $i < $limiti; $i++) {
-					$metaTags[$names[$i]] = array('html' => htmlentities($originals[$i]), 'value' => $values[$i]);
-				}
-			}
+			if ((strpos($value, 'property="og:url"') !== false || strpos($value, "property='og:url'") !== false) || (strpos($value, 'name="url"') !== false || strpos($value, "name='url'") !== false))
+				$metaTags["url"] = separeMetaTagsContent($value);
+			else if ((strpos($value, 'property="og:title"') !== false || strpos($value, "property='og:title'") !== false) || (strpos($value, 'name="title"') !== false || strpos($value, "name='title'") !== false))
+				$metaTags["title"] = separeMetaTagsContent($value);
+			else if ((strpos($value, 'property="og:description"') !== false || strpos($value, "property='og:description'") !== false) || (strpos($value, 'name="description"') !== false || strpos($value, "name='description'") !== false))
+				$metaTags["description"] = separeMetaTagsContent($value);
+			else if ((strpos($value, 'property="og:image"') !== false || strpos($value, "property='og:image'") !== false) || (strpos($value, 'name="image"') !== false || strpos($value, "name='image'") !== false))
+				$metaTags["image"] = separeMetaTagsContent($value);
 		}
 
 		$result = $metaTags;
@@ -312,7 +306,6 @@ if (preg_match($urlRegex, $text, $match)) {
 	$images = "";
 	$description = "";
 	$videoIframe = "";
-	$titleAnalysis = "";
 	$finalUrl = "";
 	$finalLink = "";
 	$video = "no";
@@ -343,42 +336,33 @@ if (preg_match($urlRegex, $text, $match)) {
 		$pageUrl = $finalUrl = $urlData["url"];
 		$raw = $urlData["content"];
 
+		// Estou aqui <--
 		$metaTags = getMetaTags($raw);
 
-		foreach ($metaTags as $metaTag) {
-			if (strpos($metaTag["html"], "title") !== false) {
-				$title = $metaTag["value"];
-			} else {
-				$title = getOpenGraphicContent("og:title", $raw);
-				if ($title == "") {
-					if (preg_match("/<title(.*?)>(.*?)<\/title>/i", str_replace("\n", " ", $raw), $matching))
-						$title = $matching[2];
-					$titleAnalysis = " " . strtolower($title);
-					if ($title == "" || (strpos($titleAnalysis, "404") !== false && strpos($titleAnalysis, "not found") !== false && strpos($titleAnalysis, "error") !== false))
-						$title = $match[0];
-					if (strpos($titleAnalysis, "navegador incomp") !== false || strpos($titleAnalysis, "browser not compatible") !== false)
-						$title = "Facebook";
-				}
-			}
+		$tempTitle = trim($metaTags["title"]);
+		if ($tempTitle != "")
+			$title = $tempTitle;
 
-			if ($description == "") {
-				$description = getOpenGraphicContent("og:description", $raw);
-				if ($description == "") {
-					if (strpos($metaTag["html"], "description") !== false) {
-						$description = $metaTag["value"];
-						$descriptionUnderstood = true;
-					} else {
-						$description = crawCode($raw);
-					}
-				}
-			}
+		if ($title == "") {
+			if (preg_match("/<title(.*?)>(.*?)<\/title>/i", str_replace("\n", " ", $raw), $matching))
+				$title = $matching[2];
 		}
+
+		$tempDescription = trim($metaTags["description"]);
+		if ($tempDescription != "")
+			$description = $tempDescription;
+		else
+			$description = crawCode($raw);
+
+		if ($description != "")
+			$descriptionUnderstood = true;
 
 		if (($descriptionUnderstood == false && strlen($title) > strlen($description) && !preg_match($urlRegex, $description) && $description != "" && !preg_match('/[A-Z]/', $description)) || $title == $description) {
 			$title = $description;
 			$description = crawCode($raw);
 		}
-		$images = getOpenGraphicContent("og:image", $raw);
+
+		$images = trim($metaTags["image"]);
 		$media = array();
 
 		if (strpos($pageUrl, "youtube.com") !== false) {
@@ -406,11 +390,6 @@ if (preg_match($urlRegex, $text, $match)) {
 		$description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
 
 	}
-
-	if ($title == "")
-		$title = "Enter a Title";
-	if ($description == "")
-		$description = "Enter a Description";
 
 	$answer = array("title" => $title, "titleEsc" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "cannonicalUrl" => cannonicalPage($pageUrl), "description" => strip_tags($description), "descriptionEsc" => strip_tags($description), "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
 
