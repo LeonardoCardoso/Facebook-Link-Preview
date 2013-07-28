@@ -66,7 +66,7 @@ function getPage($url, $referer, $timeout, $header = "") {
 
 function getTagContent($tag, $string) {
 	$pattern = "/<$tag(.*?)>(.*?)<\/$tag>/i";
-	
+
 	preg_match_all($pattern, $string, $matches);
 	$content = "";
 	for ($i = 0; $i < count($matches[0]); $i++) {
@@ -264,7 +264,7 @@ function crawlCode($text) {
 
 function separeMetaTagsContent($raw) {
 	preg_match('/content="(.*?)"/i', $raw, $match);
-	return  htmlentities($match[1]);
+	return htmlentities($match[1]);
 }
 
 function getMetaTags($contents) {
@@ -317,11 +317,7 @@ if (preg_match($urlRegex, $text, $match)) {
 	$pageUrl = str_replace("https://", "http://", $finalUrl);
 
 	if (isImage($pageUrl)) {
-
 		$images = $pageUrl;
-		$finalLink = explode("&", $finalUrl);
-		$finalLink = $finalLink[0];
-
 	} else {
 		$urlData = getPage($pageUrl);
 		if (!$urlData["content"] && strpos($pageUrl, "//www.") === false) {
@@ -383,12 +379,12 @@ if (preg_match($urlRegex, $text, $match)) {
 		$pageUrl = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $pageUrl))));
 		$description = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $description))));
 
-		$finalLink = explode("&", $finalUrl);
-		$finalLink = $finalLink[0];
-
 		$description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
 
 	}
+
+	$finalLink = explode("&", $finalUrl);
+	$finalLink = $finalLink[0];
 
 	$answer = array("title" => $title, "titleEsc" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "cannonicalUrl" => cannonicalPage($pageUrl), "description" => strip_tags($description), "descriptionEsc" => strip_tags($description), "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
 
