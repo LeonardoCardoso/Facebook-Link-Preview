@@ -65,7 +65,9 @@ function getPage($url, $referer, $timeout, $header = "") {
 }
 
 function getTagContent($tag, $string) {
-	preg_match_all("/<$tag(.*?)>(.*?)<\/$tag>/i", $string, $matches);
+	$pattern = "/<$tag(.*?)>(.*?)<\/$tag>/i";
+	
+	preg_match_all($pattern, $string, $matches);
 	$content = "";
 	for ($i = 0; $i < count($matches[0]); $i++) {
 		$currentMatch = strip_tags($matches[0][$i]);
@@ -75,7 +77,7 @@ function getTagContent($tag, $string) {
 		}
 	}
 	if ($content == "") {
-		preg_match("/<$tag(.*?)>(.*?)<\/$tag>/i", $string, $matches);
+		preg_match($pattern, $string, $matches);
 		$content = $matches[0];
 	}
 	return str_replace("&nbsp;", "", $content);
