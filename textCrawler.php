@@ -217,7 +217,7 @@ function getImages($text, $url, $imageQuantity) {
 			}
 		}
 	}
-	if (preg_match_all("/<link(.*?)rel=(\"|\')(.*?)icon(.*?)(\"|\')(.*?)href=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)(\/)?>(<\/link>)?/", $text, $matching)) {
+	/*if (preg_match_all("/<link(.*?)rel=(\"|\')(.*?)icon(.*?)(\"|\')(.*?)href=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)(\/)?>(<\/link>)?/", $text, $matching)) {
 		$content = joinAll($matching, 8, $url, $content);
 	} else if (preg_match_all("/<link(.*?)href=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)rel=(\"|\')(.*?)icon(.*?)(\"|\')(.*?)(\/)?>(<\/link>)?/", $text, $matching)) {
 		$content = joinAll($matching, 3, $url, $content);
@@ -226,7 +226,7 @@ function getImages($text, $url, $imageQuantity) {
 		$content = joinAll($matching, 6, $url, $content);
 	} else if (preg_match_all("/<meta(.*?)content=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)itemprop=(\"|\')image(\"|\')(.*?)(\/)?>(<\/meta>)?/", $text, $matching)) {
 		$content = joinAll($matching, 3, $url, $content);
-	}
+	}*/
 	$content = array_unique($content);
 	$content = array_values($content);
 
