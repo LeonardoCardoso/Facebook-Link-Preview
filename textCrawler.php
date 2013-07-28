@@ -299,6 +299,10 @@ function isImage($url) {
 		return false;
 }
 
+function extendedTrim($content){
+	return trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $content))));
+}
+
 if (preg_match($urlRegex, $text, $match)) {
 
 	$raw = "";
@@ -334,7 +338,7 @@ if (preg_match($urlRegex, $text, $match)) {
 
 		$metaTags = getMetaTags($raw);
 
-		$tempTitle = trim($metaTags["title"]);
+		$tempTitle = extendedTrim($metaTags["title"]);
 		if ($tempTitle != "")
 			$title = $tempTitle;
 
@@ -343,7 +347,7 @@ if (preg_match($urlRegex, $text, $match)) {
 				$title = $matching[2];
 		}
 
-		$tempDescription = trim($metaTags["description"]);
+		$tempDescription = extendedTrim($metaTags["description"]);
 		if ($tempDescription != "")
 			$description = $tempDescription;
 		else
@@ -357,7 +361,7 @@ if (preg_match($urlRegex, $text, $match)) {
 			$description = crawlCode($raw);
 		}
 
-		$images = trim($metaTags["image"]);
+		$images = extendedTrim($metaTags["image"]);
 		$media = array();
 
 		if (strpos($pageUrl, "youtube.com") !== false) {
@@ -375,9 +379,9 @@ if (preg_match($urlRegex, $text, $match)) {
 		if ($media != null && $media[0] != "" && $media[1] != "")
 			$video = "yes";
 
-		$title = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $title))));
-		$pageUrl = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $pageUrl))));
-		$description = trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $description))));
+		$title = extendedTrim($title);
+		$pageUrl = extendedTrim($pageUrl);
+		$description = extendedTrim($description);
 
 		$description = preg_replace("/<script(.*?)>(.*?)<\/script>/i", "", $description);
 
