@@ -218,15 +218,15 @@ function getImages($text, $url, $imageQuantity) {
 		}
 	}
 	/*if (preg_match_all("/<link(.*?)rel=(\"|\')(.*?)icon(.*?)(\"|\')(.*?)href=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)(\/)?>(<\/link>)?/", $text, $matching)) {
-		$content = joinAll($matching, 8, $url, $content);
-	} else if (preg_match_all("/<link(.*?)href=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)rel=(\"|\')(.*?)icon(.*?)(\"|\')(.*?)(\/)?>(<\/link>)?/", $text, $matching)) {
-		$content = joinAll($matching, 3, $url, $content);
-	}
-	if (preg_match_all("/<meta(.*?)itemprop=(\"|\')image(\"|\')(.*?)content=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)(\/)?>(<\/meta>)?/", $text, $matching)) {
-		$content = joinAll($matching, 6, $url, $content);
-	} else if (preg_match_all("/<meta(.*?)content=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)itemprop=(\"|\')image(\"|\')(.*?)(\/)?>(<\/meta>)?/", $text, $matching)) {
-		$content = joinAll($matching, 3, $url, $content);
-	}*/
+	 $content = joinAll($matching, 8, $url, $content);
+	 } else if (preg_match_all("/<link(.*?)href=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)rel=(\"|\')(.*?)icon(.*?)(\"|\')(.*?)(\/)?>(<\/link>)?/", $text, $matching)) {
+	 $content = joinAll($matching, 3, $url, $content);
+	 }
+	 if (preg_match_all("/<meta(.*?)itemprop=(\"|\')image(\"|\')(.*?)content=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)(\/)?>(<\/meta>)?/", $text, $matching)) {
+	 $content = joinAll($matching, 6, $url, $content);
+	 } else if (preg_match_all("/<meta(.*?)content=(\"|\')(.+?)(gif|jpg|png|bmp|ico)(\"|\')(.*?)itemprop=(\"|\')image(\"|\')(.*?)(\/)?>(<\/meta>)?/", $text, $matching)) {
+	 $content = joinAll($matching, 3, $url, $content);
+	 }*/
 	$content = array_unique($content);
 	$content = array_values($content);
 
@@ -264,7 +264,8 @@ function crawlCode($text) {
 
 function separeMetaTagsContent($raw) {
 	preg_match('/content="(.*?)"/i', $raw, $match);
-	return htmlentities($match[1]);
+	return $match[1];
+	// htmlentities($match[1]);
 }
 
 function getMetaTags($contents) {
@@ -299,7 +300,7 @@ function isImage($url) {
 		return false;
 }
 
-function extendedTrim($content){
+function extendedTrim($content) {
 	return trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $content))));
 }
 
