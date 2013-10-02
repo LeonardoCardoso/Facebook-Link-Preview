@@ -264,6 +264,9 @@ function crawlCode($text) {
 
 function separeMetaTagsContent($raw) {
 	preg_match('/content="(.*?)"/i', $raw, $match);
+    if(count($match) == 0){
+        preg_match("/content='(.*?)'/i", $raw, $match);
+    }
 	return $match[1];
 	// htmlentities($match[1]);
 }
