@@ -20,8 +20,9 @@ $text = $_GET["text"];
 $imageQuantity = $_GET["imagequantity"];
 $text = " " . str_replace("\n", " ", $text);
 $urlRegex = "/(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z0-9_.\:\;-]*)*(\?[\&\%\|\+a-z0-9_=,\.\:\;-]*)?([\&\%\|\+&a-z0-9_=,\:\;\.-]*)([\!\#\/\&\%\|\+a-z0-9_=,\:\;\.-]*)}*/i";
+$hdr = "";
 
-function getPage($url, $referer, $timeout, $header = "") {
+function getPage($url, $referer = null, $timeout = null, $header = "") {
 	// php5-curl must be installed and enabled
 
 	/*
@@ -59,9 +60,14 @@ function getPage($url, $referer, $timeout, $header = "") {
 	$header = curl_getinfo($ch);
 	curl_close($ch);
 
-	$res['content'] = $content;
+    $hrd = $header["content_type"];
+    header("Content-Type: ".$hrd, true);
+
+    $res['content'] = $content;
 	$res['url'] = $header['url'];
-	return $res;
+	$res['header'] = $hrd;
+
+    return $res;
 }
 
 function getTagContent($tag, $string) {
@@ -307,6 +313,36 @@ function extendedTrim($content) {
 	return trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $content))));
 }
 
+
+function json_safe($data, $hdr){
+    if(strstr($hdr, "windows"))
+        return json_encode(json_fix($data));
+    else
+        return json_encode($data);
+}
+
+function json_fix($data){
+    if(is_array($data))    {
+        $new = array();
+        foreach ($data as $k => $v)
+        {
+            $new[json_fix($k)] = json_fix($v);
+        }
+        $data = $new;
+    }
+    else if(is_object($data)){
+        $datas = get_object_vars($data);
+        foreach ($datas as $m => $v)
+        {
+            $data->$m = json_fix($v);
+        }
+    }
+    else if(is_string($data)){
+        $data = iconv('cp1251', 'utf-8', $data);
+    }
+    return $data;
+}
+
 if (preg_match($urlRegex, $text, $match)) {
 
 	$raw = "";
@@ -339,6 +375,7 @@ if (preg_match($urlRegex, $text, $match)) {
 
 		$pageUrl = $finalUrl = $urlData["url"];
 		$raw = $urlData["content"];
+        $hdr = $urlData["header"];
 
 		$metaTags = getMetaTags($raw);
 
@@ -396,12 +433,13 @@ if (preg_match($urlRegex, $text, $match)) {
 
 	$answer = array("title" => $title, "titleEsc" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "cannonicalUrl" => cannonicalPage($pageUrl), "description" => strip_tags($description), "descriptionEsc" => strip_tags($description), "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
 
-	echo json_encode($answer);
+    echo json_safe($answer, $hdr);
 
 }
 
 if ($urlOpen == true) {
 	ini_set('allow_url_fopen', 0);
 }
+
 ?>
 
