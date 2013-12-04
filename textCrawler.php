@@ -117,6 +117,83 @@ function mediaVimeo($url) {
 	return $media;
 }
 
+function mediaMetacafe($url) {
+	$media = array();
+    preg_match('|metacafe\.com/watch/([\w\-\_]+)(.*)|', $url, $matching);
+    if($matching[1]!="") {
+		$vid = $matching[1];
+		$vtitle=trim($matching[2], "/");
+		array_push($media, "http://s4.mcstatic.com/thumb/{$vid}/0/6/videos/0/6/{$vtitle}.jpg");
+		array_push($media, '<iframe id="' . date("YmdHis") . $vid . '" style="display: none; margin-bottom: 5px;" width="499" height="368" src="http://www.metacafe.com/embed/'.$vid.'" allowFullScreen frameborder=0></iframe>');
+	} else {
+		array_push($media, "", "");
+	}
+	return $media;
+}
+
+function mediaDailymotion($url) {
+	$media = array();
+	$id = strtok(basename($url), '_');
+	if($id!="")	{
+		//$hash = file_get_contents("http://www.dailymotion.com/services/oembed?format=json&url=http://www.dailymotion.com/embed/video/$id");
+		//$hash=json_decode($hash,true);
+		//array_push($media, $hash['thumbnail_url']);
+
+		array_push($media, "http://www.dailymotion.com/thumbnail/160x120/video/$id");
+		array_push($media, '<iframe id="' . date("YmdHis") . $id . '" style="display: none; margin-bottom: 5px;" width="499" height="368" src="http://www.dailymotion.com/embed/video/'.$id.'" allowFullScreen frameborder=0></iframe>');
+	} else {
+		array_push($media, "", "");
+	}
+	return $media;
+}
+
+function mediaCollegehumor($url) {
+	$media = array();
+	preg_match('#(?<=video/).*?(?=/)#', $url, $matching);
+	$id=$matching[0];
+	if($id!="")	{
+		$hash = file_get_contents("http://www.collegehumor.com/oembed.json?url=http://www.dailymotion.com/embed/video/$id");
+		$hash=json_decode($hash,true);
+		array_push($media, $hash['thumbnail_url']);
+		array_push($media, '<iframe id="' . date("YmdHis") . $id . '" style="display: none; margin-bottom: 5px;" width="499" height="368" src="http://www.collegehumor.com/e/'.$id.'" allowFullScreen frameborder=0></iframe>');
+	} else {
+		array_push($media, "", "");
+	}
+	return $media;
+	
+}
+
+function mediaBlip($url) {
+	$media = array();
+	if($url!="")	{
+		$hash = file_get_contents("http://blip.tv/oembed?url=$url");
+		$hash=json_decode($hash,true);
+		preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $hash['html'], $matching);
+		$src=$matching[1];
+		array_push($media, $hash['thumbnail_url']);
+		array_push($media, '<iframe id="' . date("YmdHis") .'blip" style="display: none; margin-bottom: 5px;" width="499" height="368" src="'.$src.'" allowFullScreen frameborder=0></iframe>');
+	} else {
+		array_push($media, "", "");
+	}
+	return $media;
+}
+
+function mediaFunnyordie($url) {
+	$media = array();
+	if($url!="")	{		
+		$hash = file_get_contents("http://www.funnyordie.com/oembed.json?url=$url");
+		$hash=json_decode($hash,true);
+		preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $hash['html'], $matching);
+		$src=$matching[1];
+		array_push($media, $hash['thumbnail_url']);
+		array_push($media, '<iframe id="' . date("YmdHis") .'funnyordie" style="display: none; margin-bottom: 5px;" width="499" height="368" src="'.$src.'" allowFullScreen frameborder=0></iframe>');
+	} else {
+		array_push($media, "", "");
+	}
+	return $media;
+	
+}
+
 function cannonicalLink($imgSrc, $referer) {
 	if (strpos($imgSrc, "//") === 0)
 		$imgSrc = "http:" . $imgSrc;
@@ -414,6 +491,32 @@ if (preg_match($urlRegex, $text, $match)) {
 			$images = $media[0];
 			$videoIframe = $media[1];
 		}
+		else if (strpos($pageUrl, "metacafe.com") !== false) {
+			$media = mediaMetacafe($pageUrl);
+			$images = $media[0];
+			$videoIframe = $media[1];
+		}
+		else if (strpos($pageUrl, "dailymotion.com") !== false) {
+			$media = mediaDailymotion($pageUrl);
+			$images = $media[0];
+			$videoIframe = $media[1];
+		}
+		else if (strpos($pageUrl, "collegehumor.com") !== false) {
+			$media = mediaCollegehumor($pageUrl);
+			$images = $media[0];
+			$videoIframe = $media[1];
+		}
+		else if (strpos($pageUrl, "blip.tv") !== false) {
+			$media = mediaBlip($pageUrl);
+			$images = $media[0];
+			$videoIframe = $media[1];
+		}
+		else if (strpos($pageUrl, "funnyordie.com") !== false) {
+			$media = mediaFunnyordie($pageUrl);
+			$images = $media[0];
+			$videoIframe = $media[1];
+		}
+
 		if ($images == "") {
 			$images = getImages($raw, $pageUrl, $imageQuantity);
 		}
