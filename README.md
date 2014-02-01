@@ -5,3 +5,5 @@ The algorithm keeps tracking what you are typing in the status field and through
 Once the source code of the url is obtained, regular expressions begin to seek out and capture relevant informations on it. These informations is basically the title page, the images contained therein, and a brief description of the content covered in the page.
 
 For more details, visit http://lab.leocardz.com/facebook-link-preview-php--jquery/
+
+![Link Preview](http://leocardz.com/util/assets/images/posts/facebook-link-preview-php--jquery/linkPreviewImageTimeLapse.png)
