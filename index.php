@@ -8,7 +8,8 @@
 		<script type="text/javascript" src="js/linkPreview.js" ></script>
 		<script>
 			$(document).ready(function() {
-				$('.linkPreview').linkPreview();
+				$('#lp1').linkPreview();
+				$('#lp2').linkPreview({placeholder: "Second Field"});
 				// setting max number of images $('.linkPreview').linkPreview({imageQuantity: "put here the number"});
 				// e.g. $('.linkPreview').linkPreview({imageQuantity: 15});
 			});
@@ -19,46 +20,8 @@
 			<img src="img/leocardz.png" />
 		</div>
 		<div class="center">
-			<div class="linkPreview">
-				<div id="previewLoading"></div>
-				<div style="float: left;">
-					<textarea type="text" id="text" style="text-align: left" placeholder="What's in your mind"/>
-					</textarea>
-					<div style="clear: both"></div>
-				</div>
-				<div id="preview">
-					<div id="previewImages">
-						<div id="previewImage"><img src="img/loader.gif" style="margin-left: 43%; margin-top: 39%;" ></img>
-						</div>
-						<input type="hidden" id="photoNumber" value="0" />
-					</div>
-					<div id="previewContent">
-						<div id="closePreview" title="Remove" ></div>
-						<div id="previewTitle"></div>
-						<div id="previewUrl"></div>
-						<div id="previewDescription"></div>
-						<div id="hiddenDescription"></div>
-						<div id="previewButtons" >
-							<div id="previewPreviousImg" class="buttonLeftDeactive" ></div><div id="previewNextImg" class="buttonRightDeactive"  ></div>
-							<div class="photoNumbers" ></div>
-							<div class="chooseThumbnail">
-								Choose a thumbnail
-							</div>
-						</div>
-						<input type="checkbox" id="noThumb" class="noThumbCb" />
-						<div class="nT"  >
-							<span id="noThumbDiv" >No thumbnail</span>
-						</div>
-					</div>
-					<div style="clear: both"></div>
-				</div>
-				<div style="clear: both"></div>
-				<div id="postPreview">
-					<input class="postPreviewButton" type="submit" value="Post" />
-					<div style="clear: both"></div>
-				</div>
-				<div class="previewPostedList"></div>
-			</div>
+			<div class="linkPreview" id="lp1"></div>
+			<div class="linkPreview" id="lp2"></div>
 		</div>
 	</body>
 </html>

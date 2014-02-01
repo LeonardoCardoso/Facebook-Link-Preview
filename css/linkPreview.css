@@ -1,4 +1,4 @@
-#preview{
+.preview{
 	padding: 5px;
 	width: 499px;
 	color: black;
@@ -12,34 +12,34 @@
 	border-bottom: 1px solid #e6e6e6;
 	float: left;
 }
-#previewImages, #previewImage{
+.previewImages, .previewImage{
 	width: 130px;
 	margin-right: 12px;
 	float: left;
 	color: transparent;
 }
-#previewButtons{
+.previewButtons{
 	display: none;
 	width: 290px;
 	margin-bottom: 39px;
 	margin-top: 12px;
 }
-#previewContent{
+.previewContent{
 	font-size: 11px;
 	width: 290px;
 	float: left;
 }
-#previewTitle{
+.previewTitle{
 	width: 290px;
 	font-weight: bold;
 	font-size: 12px;
 	margin: 0 auto 2px auto;
 }
-#previewTitle a{
+.previewTitle a{
 	width: 290px;
 	margin: 0 auto 0 auto;
 }
-#previewUrl{
+.previewUrl{
 	width: 290px;
 	color: #666;
 	font-size: 11px;
@@ -48,10 +48,10 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-#previewDescription{
+.previewDescription{
 	margin: 0 auto 8px auto;
 }
-#previewTitle span, #previewDescription span{
+.previewTitle span, .previewDescription span{
 	cursor: pointer;
 	word-break: break-word;
 }
@@ -113,7 +113,7 @@
 	margin-top: 5px;
 	float: left;
 }
-#previewLoading{
+.previewLoading{
 	float: right;
 	margin-bottom: 2px;
 	margin-right: 14px;
@@ -124,7 +124,7 @@
 	margin: auto;
 	width: 525px;
 }
-#noThumbDiv{
+.noThumbDiv{
 	color: #333;
 	font-size: 11px;
 }
@@ -145,7 +145,7 @@
 	font-size: 11px;
 	padding: 3px 1px;
 }
-#text{
+.text{
 	width: 499px;
 	height: 60px;
 	border: 1px solid #b3b3b3;
@@ -155,7 +155,7 @@
 	padding: 5px;
 	color: grey;
 }
-#closePreview{
+.closePreview{
 	float: right;
 	margin-right: -66px;
 	background-image: url('../img/close.png');
@@ -165,12 +165,12 @@
 	width: 15px;
 	cursor: pointer;
 }
-#closePreview:hover{
+.closePreview:hover{
 	background-image: url('../img/close.png');
 	background-repeat: no-repeat;
 	background-position: left -32px;
 }
-#closePreview:active{
+.closePreview:active{
 	background-image: url('../img/close.png');
 	background-repeat: no-repeat;
 	background-position: left -48px;
@@ -201,7 +201,7 @@
 	background-image: none;
 	background: #4f6aa3;
 }
-#postPreview{
+.postPreview{
 	background: #f2f2f2;
 	padding: 2px;
 	border: 1px solid #b3b3b3;
