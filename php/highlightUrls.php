@@ -1,12 +1,17 @@
 <?php
-/*
+/**
  * Copyright (c) 2012 Leonardo Cardoso (http://leocardz.com)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * Version: 0.3.1
- *
+ * Version: 1.0.0
  */
+
+/**
+ * This file is only to hightlight the urls that are found shown when post is already posted. :)
+ * So, it has nothing bound directly to LinkPreview class
+ */
+
 error_reporting(false);
 $text = $_GET["text"];
 $description = $_GET["description"];
@@ -39,4 +44,3 @@ if (preg_match_all($urlRegex, $description, $matches)) {
 $answer = array("urls" => $text, "description" => $description);
 
 echo json_encode($answer);
-?>

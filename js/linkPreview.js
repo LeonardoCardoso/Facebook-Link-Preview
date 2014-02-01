@@ -1,21 +1,21 @@
-/*
+/**
  * Copyright (c) 2012 Leonardo Cardoso (http://leocardz.com)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * Version: 0.5.1
+ * Version: 1.0.0
  *
  */
 (function($) {
 	$.fn.linkPreview = function(options) {
+        function trim(str) {
+            return str.replace(/^\s+|\s+$/g, "");
+        }
+
 		var defaults = {
 			imageQuantity : -1 // illimited
-		}
+		};
 		var opts = jQuery.extend(defaults, options);
-
-		function trim(str) {
-			return str.replace(/^\s+|\s+$/g, "");
-		}
 
 		var text;
 		var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z0-9_.\:\;-]*)*(\?[\&\%\|\+a-z0-9_=,\.\:\;-]*)?([\&\%\|\+&a-z0-9_=,\:\;\.-]*)([\!\#\/\&\%\|\+a-z0-9_=,\:\;\.-]*)}*/i;
@@ -99,13 +99,13 @@
 					block = true;
 					$('#preview').hide();
 					$('#previewButtons').hide();
-					$('#previewLoading').html("<img src='img/loader.gif' ></img>");
+					$('#previewLoading').html("<img src='img/loader.gif' />");
 					$('#photoNumber').val(0);
 
 					allowPosting = false;
 					isCrawling = true;
 
-					$.get('textCrawler.php', {
+					$.get('php/textCrawler.php', {
 						text : text,
 						imagequantity : opts.imageQuantity
 					}, function(answer) {
@@ -121,8 +121,8 @@
 							answer.title = "Enter a title";
 						if (answer.description === null || answer.description === "")
 							answer.description = "Enter a description";
-						if (answer.cannonicalUrl === null)
-							answer.cannonicalUrl = "";
+						if (answer.canonicalUrl === null)
+							answer.canonicalUrl = "";
 						if (answer.images === null)
 							answer.images = "";
 						if (answer.video === null)
@@ -141,8 +141,8 @@
 						$('#previewUrl').html(answer.url);
 						$('#previewDescription').html("<span id='previewSpanDescription' >" + answer.description + "</span><textarea id='previewInputDescription' style='width: 290px; display: none;' class='inputPreview' >" + answer.description + "</textarea>");
 						title = "<a href='" + answer.pageUrl + "' target='_blank'>" + $('#previewTitle').html() + "</a>";
-						url = "<a href='http://" + answer.cannonicalUrl + "' target='_blank'>" + answer.cannonicalUrl + "</a>";
-						fancyUrl = answer.cannonicalUrl;
+						url = "<a href='http://" + answer.canonicalUrl + "' target='_blank'>" + answer.canonicalUrl + "</a>";
+						fancyUrl = answer.canonicalUrl;
 						hrefUrl = answer.url;
 						description = $('#previewDescription').html();
 						video = answer.video;
@@ -384,7 +384,7 @@
 			description = $('#previewDescription').html();
 
 			if (((trim(text) !== "") || (trim(text) === "" && trim(hrefUrl) !== "")) && (allowPosting === true && isCrawling === false)) {
-				$.get('highlightUrls.php', {
+				$.get('php/highlightUrls.php', {
 					text : text,
 					description : description
 				}, function(urls) {
