@@ -6,8 +6,11 @@
 		<link rel="stylesheet" class="cssButtons" type="text/css" href="css/linkPreview.css" />
 		<script type="text/javascript" src="js/jquery.js" ></script>
 		<script type="text/javascript" src="js/linkPreview.js" ></script>
+		<script type="text/javascript" src="js/linkPreviewRetrieve.js" ></script>
 		<script>
 			$(document).ready(function() {
+				$('#retrieveFromDatabase').linkPreviewRetrieve();
+
 				$('#lp1').linkPreview();
 				$('#lp2').linkPreview({placeholder: "Second Field"});
 				// setting max number of images $('.linkPreview').linkPreview({imageQuantity: "put here the number"});
@@ -20,8 +23,11 @@
 			<img src="img/leocardz.png" />
 		</div>
 		<div class="center">
+
 			<div class="linkPreview" id="lp1"></div>
 			<div class="linkPreview" id="lp2"></div>
-		</div>
+
+            <div id="retrieveFromDatabase" ></div>
+        </div>
 	</body>
 </html>

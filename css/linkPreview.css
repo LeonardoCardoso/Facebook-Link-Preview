@@ -20,27 +20,27 @@
 }
 .previewButtons{
 	display: none;
-	width: 290px;
+	width: 355px;
 	margin-bottom: 39px;
 	margin-top: 12px;
 }
 .previewContent{
 	font-size: 11px;
-	width: 290px;
+	width: 355px;
 	float: left;
 }
 .previewTitle{
-	width: 290px;
+	width: 355px;
 	font-weight: bold;
 	font-size: 12px;
 	margin: 0 auto 2px auto;
 }
 .previewTitle a{
-	width: 290px;
+	width: 355px;
 	margin: 0 auto 0 auto;
 }
 .previewUrl{
-	width: 290px;
+	width: 355px;
 	color: #666;
 	font-size: 11px;
 	margin: 0 auto 9px auto;
@@ -120,7 +120,7 @@
 	border: 1px solid transparent;
 	height: 12px;
 }
-.linkPreview{
+.linkPreview, #retrieveFromDatabase{
 	margin: auto;
 	width: 525px;
 }
@@ -157,7 +157,6 @@
 }
 .closePreview{
 	float: right;
-	margin-right: -66px;
 	background-image: url('../img/close.png');
 	background-repeat: no-repeat;
 	background-position: left 0px;
@@ -236,11 +235,13 @@
 }
 .previewContentPosted{
 	font-size: 11px;
-	width: 290px;
+	width: 355px;
 	float: left;
 }
+
+
 .previewTitlePosted, .previewTitlePosted a{
-	width: 290px;
+	width: 355px;
 	font-weight: bold;
 	font-size: 12px;
 	margin: 0 auto 2px auto;
@@ -251,7 +252,7 @@
 	color: #3B5998;
 }
 .previewUrlPosted, .previewUrlPosted a{
-	width: 290px;
+	width: 355px;
 	color: gray !important;
 	font-size: 11px;
 	margin: 0 auto 9px auto;

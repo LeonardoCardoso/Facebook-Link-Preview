@@ -1,10 +1,9 @@
 /**
- * Copyright (c) 2012 Leonardo Cardoso (http://leocardz.com)
+ * Copyright (c) 2014 Leonardo Cardoso (http://leocardz.com)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
  * Version: 1.0.0
- *
  */
 (function($) {
 	$.fn.linkPreview = function(options) {
@@ -30,7 +29,7 @@
 		var block = false;
 		var blockTitle = false;
 		var blockDescription = false;
-		var contentWidth = 290;
+		var contentWidth = 355;
 		var content = "";
 		var image = "";
 		var images = "";
@@ -75,17 +74,14 @@
 			$('#previewPreviousImg_'+selector).addClass('buttonLeftDeactive');
 			$('#previewNextImg_'+selector).removeClass('buttonRightActive');
 			$('#previewNextImg_'+selector).addClass('buttonRightDeactive');
-			$('#closePreview_'+selector).css({
-				"margin-right" : "-66px"
-			});
 			$('#previewTitle_'+selector).css({
-				"width" : "290px"
+				"width" : "355px"
 			});
 			$('#previewDescription_'+selector).css({
-				"width" : "290px"
+				"width" : "355px"
 			});
 			$('#previewButtons_'+selector).show();
-			contentWidth = 290;
+			contentWidth = 355;
 			photoNumber = 0;
 			$('#noThumb_'+selector).show();
 			$('#nT_'+selector).show();
@@ -139,14 +135,14 @@
 						resetPreview();
 						$('#previewLoading_'+selector).html("");
 						$('#preview_'+selector).show();
-						$('#previewTitle_'+selector).html("<span id='previewSpanTitle' >" + answer.title + "</span><input type='text' value='" + answer.title + "' id='previewInputTitle' class='inputPreview' style='display: none;'/>");
+						$('#previewTitle_'+selector).html("<span id='previewSpanTitle_"+selector+"' class='previewSpanTitle' >" + answer.title + "</span><input type='text' value='" + answer.title + "' id='previewInputTitle_"+selector+"' class='previewInputTitle inputPreview' style='display: none;'/>");
 						$('#text_'+selector).css({
 							"border" : "1px solid #b3b3b3",
 							"border-bottom" : "1px dashed #b3b3b3"
 						});
 
 						$('#previewUrl_'+selector).html(answer.url);
-						$('#previewDescription_'+selector).html("<span id='previewSpanDescription' >" + answer.description + "</span><textarea id='previewInputDescription' style='width: 290px; display: none;' class='inputPreview' >" + answer.description + "</textarea>");
+						$('#previewDescription_'+selector).html("<span id='previewSpanDescription_"+selector+"' class='previewSpanDescription' >" + answer.description + "</span><textarea id='previewInputDescription_"+selector+"' class='previewInputDescription' style='width: 355px; display: none;' class='inputPreview' >" + answer.description + "</textarea>");
 						title = "<a href='" + answer.pageUrl + "' target='_blank'>" + $('#previewTitle_'+selector).html() + "</a>";
 						url = "<a href='http://" + answer.canonicalUrl + "' target='_blank'>" + answer.canonicalUrl + "</a>";
 						fancyUrl = answer.canonicalUrl;
@@ -383,6 +379,7 @@
 		});
 
 		$('#postPreview_'+selector).click(function() {
+
 			imageId = "";
 			pTP = "";
 			pDP = "";
@@ -416,6 +413,17 @@
 					}
 					content = '<div class="previewPosted">' + '<div class="previewTextPosted">' + urls.urls + '</div>' + videoIframe + '<div class="previewImagesPosted">' + '<div class="previewImagePosted">' + leftSideContent + '</div>' + '</div>' + '<div class="previewContentPosted">' + '<div class="previewTitlePosted" id="' + pTP + '" style="width: ' + contentWidth + 'px" ><a href="' + hrefUrl + '" target="_blank">' + title + '</a></div>' + '<div class="previewUrlPosted">' + fancyUrl + '</div>' + '<div class="previewDescriptionPosted" id="' + pDP + '" style="width: ' + contentWidth + 'px" >' + urls.description + '</div>' + '</div>' + '<div style="clear: both"></div>' + '</div>';
 
+                    /** Database insert */
+                    $.post('php/save.php', {
+                        text : $('#text_'+selector).val(),
+                        image : $('#imagePreview' + photoNumber).attr("src"),
+                        title : title,
+                        canonicalUrl : fancyUrl,
+                        url : hrefUrl,
+                        description : $('#previewSpanDescription_'+selector).html(),
+                        iframe : videoIframe
+                    });
+
 					$('#preview_'+selector).fadeOut("fast", function() {
 						$('#text_'+selector).css({
 							"border" : "1px solid #b3b3b3",
@@ -448,7 +456,10 @@
 							});
 						});
 					});
-					block = false;
+
+
+
+                    block = false;
 					hrefUrl = '';
 					fancyUrl = '';
 					images = '';
