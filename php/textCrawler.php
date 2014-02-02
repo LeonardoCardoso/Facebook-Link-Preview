@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright (c) 2012 Leonardo Cardoso (http://leocardz.com)
+ * Copyright (c) 2014 Leonardo Cardoso (http://leocardz.com)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
  * Version: 1.0.0
  */
-include "LinkPreview.php";
+include_once "classes/LinkPreview.php";
 
 SetUp::init();
 
-$text = $_GET["text"];
-$imageQuantity = $_GET["imagequantity"];
+$text = $_POST["text"];
+$imageQuantity = $_POST["imagequantity"];
 $text = " " . str_replace("\n", " ", $text);
 $header = "";
 

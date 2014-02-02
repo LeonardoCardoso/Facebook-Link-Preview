@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2012 Leonardo Cardoso (http://leocardz.com)
+ * Copyright (c) 2014 Leonardo Cardoso (http://leocardz.com)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
