@@ -108,7 +108,7 @@
 					allowPosting = false;
 					isCrawling = true;
 
-					$.get('php/textCrawler.php', {
+					$.post('php/textCrawler.php', {
 						text : text,
 						imagequantity : opts.imageQuantity
 					}, function(answer) {
@@ -162,9 +162,9 @@
 						var appendImage = "";
 						for ( i = 0; i < images.length; i++) {
 							if (i === 0)
-								appendImage += "<img id='imagePreview" + i + "' src='" + images[i] + "' style='width: 130px; height: auto' ></img>";
+								appendImage += "<img id='imagePreview_"+ selector + "_" + i + "' src='" + images[i] + "' style='width: 130px; height: auto' ></img>";
 							else
-								appendImage += "<img id='imagePreview" + i + "' src='" + images[i] + "' style='width: 130px; height: auto; display: none' ></img>";
+								appendImage += "<img id='imagePreview_"+ selector + "_" + i + "' src='" + images[i] + "' style='width: 130px; height: auto; display: none' ></img>";
 						}
 						$('#previewImage_'+selector).html("<a href='" + answer.pageUrl + "' target='_blank'>" + appendImage + "</a><div id='whiteImage' style='width: 130px; color: transparent; display:none;'>...</div>");
 						$('#photoNumbers_'+selector).html("1 of " + images.length);
@@ -177,7 +177,7 @@
 								$('#previewPreviousImg_'+selector).click(function() {
 									if (images.length > 1) {
 										photoNumber = parseInt($('#photoNumber_'+selector).val());
-										$('#imagePreview' + photoNumber).css({
+										$('#imagePreview_'+ selector + '_' + photoNumber).css({
 											'display' : 'none'
 										});
 										photoNumber -= 1;
@@ -190,7 +190,7 @@
 											$('#previewPreviousImg_'+selector).removeClass('buttonLeftActive');
 											$('#previewPreviousImg_'+selector).addClass('buttonLeftDeactive');
 										}
-										$('#imagePreview' + photoNumber).css({
+										$('#imagePreview_'+ selector + '_' + photoNumber).css({
 											'display' : 'block'
 										});
 										$('#photoNumber_'+selector).val(photoNumber);
@@ -200,7 +200,7 @@
 								$('#previewNextImg_'+selector).click(function() {
 									if (images.length > 1) {
 										photoNumber = parseInt($('#photoNumber_'+selector).val());
-										$('#imagePreview' + photoNumber).css({
+										$('#imagePreview_'+ selector + '_' + photoNumber).css({
 											'display' : 'none'
 										});
 										photoNumber += 1;
@@ -213,7 +213,7 @@
 											$('#previewNextImg_'+selector).removeClass('buttonRightActive');
 											$('#previewNextImg_'+selector).addClass('buttonRightDeactive');
 										}
-										$('#imagePreview' + photoNumber).css({
+										$('#imagePreview_'+ selector + '_' + photoNumber).css({
 											'display' : 'block'
 										});
 										$('#photoNumber_'+selector).val(photoNumber);
@@ -245,7 +245,7 @@
 								var noThumb = $('#noThumb_'+selector).attr("checked");
 								if (noThumb !== "checked") {
 									$('#noThumb_'+selector).attr("checked", "checked");
-									$('#imagePreview' + photoNumber).css({
+									$('#imagePreview_'+ selector + '_' + photoNumber).css({
 										'display' : 'none'
 									});
 									$('#whiteImage_'+selector).css({
@@ -254,7 +254,7 @@
 									$('#previewButtons_'+selector).hide();
 								} else {
 									$('#noThumb_'+selector).removeAttr("checked");
-									$('#imagePreview' + photoNumber).css({
+									$('#imagePreview_'+ selector + '_' + photoNumber).css({
 										'display' : 'block'
 									});
 									$('#whiteImage_'+selector).css({
@@ -333,7 +333,7 @@
 						$('#noThumb_'+selector).click(function() {
 							var noThumb = $(this).attr("checked");
 							if (noThumb !== "checked") {
-								$('#imagePreview' + photoNumber).css({
+								$('#imagePreview_'+ selector + '_' + photoNumber).css({
 									'display' : 'block'
 								});
 								$('#whiteImage_'+selector).css({
@@ -341,7 +341,7 @@
 								});
 								$('#previewButtons_'+selector).show();
 							} else {
-								$('#imagePreview' + photoNumber).css({
+								$('#imagePreview_'+ selector + '_' + photoNumber).css({
 									'display' : 'none'
 								});
 								$('#whiteImage_'+selector).css({
@@ -403,11 +403,11 @@
 							pTP = "pTP" + imageId;
 							pDP = "pDP" + imageId;
 							imageId = "img" + imageId;
-							image = "<img id='" + imageId + "' src='" + $('#imagePreview' + photoNumber).attr("src") + "' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
+							image = "<img id='" + imageId + "' src='" + $('#imagePreview_'+ selector + '_' + photoNumber).attr("src") + "' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
 							videoPlay = '<span class="videoPostPlay"></span>';
 							leftSideContent = image + videoPlay;
 						} else {
-							image = "<img src='" + $('#imagePreview' + photoNumber).attr("src") + "' style='width: 130px; height: auto; float: left;' ></img>";
+							image = "<img src='" + $('#imagePreview_'+ selector + '_' + photoNumber).attr("src") + "' style='width: 130px; height: auto; float: left;' ></img>";
 							leftSideContent = '<a href="' + hrefUrl + '" target="_blank">' + image + '</a>';
 						}
 					}
@@ -416,7 +416,7 @@
                     /** Database insert */
                     $.post('php/save.php', {
                         text : $('#text_'+selector).val(),
-                        image : $('#imagePreview' + photoNumber).attr("src"),
+                        image : $('#imagePreview_'+ selector + '_' + photoNumber).attr("src"),
                         title : title,
                         canonicalUrl : fancyUrl,
                         url : hrefUrl,

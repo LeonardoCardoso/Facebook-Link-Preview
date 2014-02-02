@@ -10,11 +10,8 @@
 		<script>
 			$(document).ready(function() {
 				$('#retrieveFromDatabase').linkPreviewRetrieve();
-
 				$('#lp1').linkPreview();
 				$('#lp2').linkPreview({placeholder: "Second Field"});
-				// setting max number of images $('.linkPreview').linkPreview({imageQuantity: "put here the number"});
-				// e.g. $('.linkPreview').linkPreview({imageQuantity: 15});
 			});
 		</script>
 	</head>

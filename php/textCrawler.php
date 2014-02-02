@@ -10,8 +10,8 @@ include_once "classes/LinkPreview.php";
 
 SetUp::init();
 
-$text = $_GET["text"];
-$imageQuantity = $_GET["imagequantity"];
+$text = $_POST["text"];
+$imageQuantity = $_POST["imagequantity"];
 $text = " " . str_replace("\n", " ", $text);
 $header = "";
 

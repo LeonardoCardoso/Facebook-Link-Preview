@@ -7,7 +7,7 @@
  * Version: 1.0.0
  */
 
-/** This class is for database connection. It's just an example, not security is being handle here */
+/** This class is for database connection. It's just an example, neither security is being handled here nor mysql errors that might be occurred. */
 
 include_once "HighLight.php";
 
