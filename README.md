@@ -63,9 +63,7 @@ Just create your own textarea (or multiple textareas) and bind it to jQuery like
 	   "pageUrl":"page url",
 	   "canonicalUrl":"cannonical url",
 	   "description":"description",
-	   "images":[
-
-	   ],
+	   "images": "img1|img2|...",
 	   "video":"yes|no",
 	   "videoIframe":"video iframe if it is video"
 	}
