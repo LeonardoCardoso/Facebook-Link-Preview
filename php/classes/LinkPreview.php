@@ -4,7 +4,7 @@
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * Version: 1.0.0
+ * Version: 1.3.0
  */
 
 /** Important php5-curl must be installed and enabled */
@@ -168,8 +168,11 @@ class LinkPreview {
 
             $finalLink = explode("&", $finalUrl);
             $finalLink = $finalLink[0];
+            $title = htmlentities($title);
+            $description = strip_tags(htmlentities($description));
 
-            $answer = array("title" => $title, "titleEsc" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "canonicalUrl" => Url::canonicalPage($pageUrl), "description" => strip_tags($description), "descriptionEsc" => strip_tags($description), "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
+            $answer = array("title" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "canonicalUrl" => Url::canonicalPage($pageUrl), "description" => $description, 
+"images" => $images, "video" => $video, "videoIframe" => $videoIframe);
 
             return Json::jsonSafe($answer, $header);
 

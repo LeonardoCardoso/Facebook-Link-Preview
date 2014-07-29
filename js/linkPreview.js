@@ -3,7 +3,7 @@
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * Version: 1.0.0
+ * Version: 1.3.0
  */
 (function($) {
 	$.fn.linkPreview = function(options) {
@@ -112,14 +112,11 @@
 						text : text,
 						imagequantity : opts.imageQuantity
 					}, function(answer) {
+
 						if (answer.url === null)
 							answer.url = "";
 						if (answer.pageUrl === null)
 							answer.pageUrl = "";
-						if (answer.title === null)
-							answer.title = answer.titleEsc;
-						if (answer.description === null)
-							answer.description = answer.descriptionEsc;
 						if (answer.title === null || answer.title === "")
 							answer.title = "Enter a title";
 						if (answer.description === null || answer.description === "")
