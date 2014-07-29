@@ -22,7 +22,7 @@
         var selector = $(this).selector;
         selector = selector.substr(1);
 
-        $(this).append('<div id="previewLoading_'+selector+'" class="previewLoading"></div> <div style="float: left;"> <textarea type="text" id="text_'+selector+'" style="text-align: left" placeholder="'+opts.placeholder+'" class="text" style="text-align: left"/></textarea> <div style="clear: both"></div> </div> <div id="preview_'+selector+'" class="preview"> <div id="previewImages_'+selector+'" class="previewImages"> <div id="previewImage_'+selector+'" class="previewImage"><img src="img/loader.gif" style="margin-left: 43%; margin-top: 39%;"/> </div> <input type="hidden" id="photoNumber_'+selector+'" class="photoNumber" value="0" /> </div> <div id="previewContent_'+selector+'" class="previewContent"> <div id="closePreview_'+selector+'" title="Remove" class="closePreview" ></div> <div id="previewTitle_'+selector+'" class="previewTitle"></div> <div id="previewUrl_'+selector+'" class="previewUrl"></div> <div id="previewDescription_'+selector+'" class="previewDescription"></div> <div id="hiddenDescription_'+selector+'" class="hiddenDescription"></div> <div id="previewButtons_'+selector+'" class="previewButtons" > <div id="previewPreviousImg_'+selector+'" class="buttonLeftDeactive" ></div> <div id="previewNextImg_'+selector+'" class="buttonRightDeactive" ></div> <div id="photoNumbers_'+selector+'" class="photoNumbers" ></div> <div id="chooseThumbnail_'+selector+'" class="chooseThumbnail"> Choose a thumbnail </div> </div> <input type="checkbox" id="noThumb_'+selector+'" class="noThumb noThumbCb" /> <div class="nT" id="nT_'+selector+'" > <span id="noThumbDiv_'+selector+'" class="noThumbDiv" >No thumbnail</span> </div> </div> <div style="clear: both"></div> </div> <div style="clear: both"></div> <div id="postPreview_'+selector+'" class="postPreview"> <input id="postPreviewButton_'+selector+'" class="postPreviewButton" type="submit" value="Post" /> <div style="clear: both"></div> </div> <div class="previewPostedList" id="previewPostedList_'+selector+'"></div>');
+        $(this).append('<div id="previewLoading_'+selector+'" class="previewLoading"></div> <div style="float: left;"> <textarea type="text" id="text_'+selector+'" style="text-align: left" placeholder="'+opts.placeholder+'" class="text" style="text-align: left"/></textarea> <div style="clear: both"></div> </div> <div id="preview_'+selector+'" class="preview"> <div id="previewImages_'+selector+'" class="previewImages"> <div id="previewImage_'+selector+'" class="previewImage"><img src="img/loader.gif" style="margin-left: 43%; margin-top: 39%;"/> </div> <input type="hidden" id="photoNumber_'+selector+'" class="photoNumber" value="0" /> </div> <div id="previewContent_'+selector+'" class="previewContent"> <div id="closePreview_'+selector+'" title="Remove" class="closePreview" ></div> <div id="previewTitle_'+selector+'" class="previewTitle"></div> <div id="previewUrl_'+selector+'" class="previewUrl"></div> <div id="previewDescription_'+selector+'" class="previewDescription"></div> <div id="hiddenDescription_'+selector+'" class="hiddenDescription"></div> <div id="previewButtons_'+selector+'" class="previewButtons" > <div id="previewPreviousImg_'+selector+'" class="buttonLeftDeactive" ></div> <div id="previewNextImg_'+selector+'" class="buttonRightDeactive" ></div> <div id="photoNumbers_'+selector+'" class="photoNumbers" ></div> <div id="chooseThumbnail_'+selector+'" class="chooseThumbnail"> Choose a thumbnail </div> </div> <div class="nT" id="nT_'+selector+'" > <span id="noThumbDiv_'+selector+'" class="noThumbDiv" ><input type="checkbox" id="noThumb_'+selector+'" class="noThumb noThumbCb" />  No thumbnail</span> </div> </div> <div style="clear: both"></div> </div> <div style="clear: both"></div> <div id="postPreview_'+selector+'" class="postPreview"> <input id="postPreviewButton_'+selector+'" class="postPreviewButton" type="submit" value="Post" /> <div style="clear: both"></div> </div> <div class="previewPostedList" id="previewPostedList_'+selector+'"></div>');
 
 		var text;
 		var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z0-9_.\:\;-]*)*(\?[\&\%\|\+a-z0-9_=,\.\:\;-]*)?([\&\%\|\+&a-z0-9_=,\:\;\.-]*)([\!\#\/\&\%\|\+a-z0-9_=,\:\;\.-]*)}*/i;
@@ -74,19 +74,45 @@
 			$('#previewPreviousImg_'+selector).addClass('buttonLeftDeactive');
 			$('#previewNextImg_'+selector).removeClass('buttonRightActive');
 			$('#previewNextImg_'+selector).addClass('buttonRightDeactive');
-			$('#previewTitle_'+selector).css({
-				"width" : "355px"
-			});
-			$('#previewDescription_'+selector).css({
-				"width" : "355px"
-			});
 			$('#previewButtons_'+selector).show();
 			contentWidth = 355;
 			photoNumber = 0;
+			$('#previewContent_'+selector).css({
+				'width' : '355px'
+			});
 			$('#noThumb_'+selector).show();
 			$('#nT_'+selector).show();
-			$('#noThumb_'+selector).removeAttr("checked");
+			$('#noThumb_'+selector).prop('checked', false);
 			images = "";
+		}
+
+		
+		function noThumbAction(noThumb, inputCheckbox) {
+			if (!noThumb) {
+				inputCheckbox.prop('checked', true);
+				$('#imagePreview_'+ selector + '_' + photoNumber).css({
+					'display' : 'none'
+				});
+				$('#whiteImage_'+selector).css({
+					'display' : 'block'
+				});
+				$('#previewContent_'+selector).css({
+					'width' : '500px'
+				});
+				$('#previewButtons_'+selector).hide();
+			} else {
+				inputCheckbox.prop('checked', false);
+				$('#imagePreview_'+ selector + '_' + photoNumber).css({
+					'display' : 'block'
+				});
+				$('#whiteImage_'+selector).css({
+					'display' : 'none'
+				});
+				$('#previewContent_'+selector).css({
+					'width' : '355px'
+				});
+				$('#previewButtons_'+selector).show();
+			}
 		}
 
 
@@ -139,7 +165,7 @@
 						});
 
 						$('#previewUrl_'+selector).html(answer.url);
-						$('#previewDescription_'+selector).html("<span id='previewSpanDescription_"+selector+"' class='previewSpanDescription' >" + answer.description + "</span><textarea id='previewInputDescription_"+selector+"' class='previewInputDescription' style='width: 355px; display: none;' class='inputPreview' >" + answer.description + "</textarea>");
+						$('#previewDescription_'+selector).html("<span id='previewSpanDescription_"+selector+"' class='previewSpanDescription' >" + answer.description + "</span><textarea id='previewInputDescription_"+selector+"' class='previewInputDescription' style='display: none;' class='inputPreview' >" + answer.description + "</textarea>");
 						title = "<a href='" + answer.pageUrl + "' target='_blank'>" + $('#previewTitle_'+selector).html() + "</a>";
 						url = "<a href='http://" + answer.canonicalUrl + "' target='_blank'>" + answer.canonicalUrl + "</a>";
 						fancyUrl = answer.canonicalUrl;
@@ -236,31 +262,18 @@
 							$('#noThumb_'+selector).hide();
 							$('#nT_'+selector).hide();
 						}
-						if (nT === false) {
+						if(nT === false){
 							nT = true;
-							$('#nT_'+selector).click(function() {
-								var noThumb = $('#noThumb_'+selector).attr("checked");
-								if (noThumb !== "checked") {
-									$('#noThumb_'+selector).attr("checked", "checked");
-									$('#imagePreview_'+ selector + '_' + photoNumber).css({
-										'display' : 'none'
-									});
-									$('#whiteImage_'+selector).css({
-										'display' : 'block'
-									});
-									$('#previewButtons_'+selector).hide();
-								} else {
-									$('#noThumb_'+selector).removeAttr("checked");
-									$('#imagePreview_'+ selector + '_' + photoNumber).css({
-										'display' : 'block'
-									});
-									$('#whiteImage_'+selector).css({
-										'display' : 'none'
-									});
-									$('#previewButtons_'+selector).show();
-								}
+							$('#noThumbDiv_'+selector).click(function() {
+								var inputCheckbox = $(this).find('input[type=checkbox]');
+								var noThumb = inputCheckbox.prop('checked');
+								noThumbAction(noThumb, inputCheckbox);
 							});
 						}
+						$('#noThumb_'+selector).click(function() {
+							var noThumb = $(this).prop("checked");
+							noThumbAction(noThumb, $(this));
+						});
 						$('#previewSpanTitle_'+selector).click(function() {
 							if (blockTitle === false) {
 								blockTitle = true;
@@ -327,26 +340,6 @@
 								"background-color" : "transparent"
 							});
 						});
-						$('#noThumb_'+selector).click(function() {
-							var noThumb = $(this).attr("checked");
-							if (noThumb !== "checked") {
-								$('#imagePreview_'+ selector + '_' + photoNumber).css({
-									'display' : 'block'
-								});
-								$('#whiteImage_'+selector).css({
-									'display' : 'none'
-								});
-								$('#previewButtons_'+selector).show();
-							} else {
-								$('#imagePreview_'+ selector + '_' + photoNumber).css({
-									'display' : 'none'
-								});
-								$('#whiteImage_'+selector).css({
-									'display' : 'block'
-								});
-								$('#previewButtons_'+selector).hide();
-							}
-						});
 						$('#closePreview_'+selector).click(function() {
 							block = false;
 							hrefUrl = '';
@@ -375,7 +368,7 @@
 			}
 		});
 
-		$('#postPreview_'+selector).click(function() {
+		$('#postPreviewButton_'+selector).click(function() {
 
 			imageId = "";
 			pTP = "";
@@ -389,7 +382,7 @@
 					text : text,
 					description : description
 				}, function(urls) {
-					if ($('#noThumb_'+selector).attr("checked") === "checked" || images.length === 0) {
+					if ($('#noThumb_'+selector).prop("checked") || images.length === 0) {
 						contentWidth = 495;
 						leftSideContent = "";
 					} else if (images || video) {
@@ -400,11 +393,11 @@
 							pTP = "pTP" + imageId;
 							pDP = "pDP" + imageId;
 							imageId = "img" + imageId;
-							image = "<img id='" + imageId + "' src='" + $('#imagePreview_'+ selector + '_' + photoNumber).attr("src") + "' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
+							image = "<img id='" + imageId + "' src='" + $('#imagePreview_'+ selector + '_' + photoNumber).prop("src") + "' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
 							videoPlay = '<span class="videoPostPlay"></span>';
 							leftSideContent = image + videoPlay;
 						} else {
-							image = "<img src='" + $('#imagePreview_'+ selector + '_' + photoNumber).attr("src") + "' style='width: 130px; height: auto; float: left;' ></img>";
+							image = "<img src='" + $('#imagePreview_'+ selector + '_' + photoNumber).prop("src") + "' style='width: 130px; height: auto; float: left;' ></img>";
 							leftSideContent = '<a href="' + hrefUrl + '" target="_blank">' + image + '</a>';
 						}
 					}
@@ -413,7 +406,7 @@
                     /** Database insert */
                     $.post('php/save.php', {
                         text : $('#text_'+selector).val(),
-                        image : $('#imagePreview_'+ selector + '_' + photoNumber).attr("src"),
+                        image : $('#imagePreview_'+ selector + '_' + photoNumber).prop("src"),
                         title : title,
                         canonicalUrl : fancyUrl,
                         url : hrefUrl,
@@ -433,7 +426,7 @@
 						$('#previewDescription_'+selector).html("");
 						$(content).hide().prependTo('#previewPostedList_'+selector).fadeIn("fast");
 						$(".imgIframe").click(function() {
-							var oldId = $(this).attr("id");
+							var oldId = $(this).prop("id");
 							var currentId = oldId.substring(3);
 							pTP = "pTP" + currentId;
 							pDP = "pDP" + currentId;
