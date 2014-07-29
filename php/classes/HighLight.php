@@ -1,10 +1,10 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: leonardo
- * Date: 01/02/14
- * Time: 20:28
- * To change this template use File | Settings | File Templates.
+ * Copyright (c) 2014 Leonardo Cardoso (http://leocardz.com)
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+ *
+ * Version: 1.3.0
  */
 
 /**

@@ -7,3 +7,82 @@ Once the source code of the url is obtained, regular expressions begin to seek o
 For mode details, visit http://lab.leocardz.com/facebook-link-preview-php--jquery/
 
 ![Link Preview](http://leocardz.com/util/assets/images/posts/facebook-link-preview-php--jquery/linkPreviewImageTimeLapse.png)
+
+=======
+
+
+## How to added to your project
+
+1 &bull; Scripts
+
+```html
+	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+
+	<script src='js/linkPreview.js' ></script>
+
+ 	<!-- 
+		If you are saving and fetching results from database using FLP,
+		you can customize the layout on this script
+	-->
+	<script src='js/linkPreviewRetrieve.js' ></script>
+```
+
+
+2 &bull; Stylesheets
+
+```html
+	<!-- 
+		This stylesheet is provides the layout of Facebook's former textarea. 
+		You can totally customize this!
+	-->
+	<link rel="stylesheet" type="text/css" href="css/linkPreview.css" />
+```
+
+3 &bull; Configuration
+
+Just create your own textarea (or multiple textareas) and bind it to jQuery like this:
+
+```html
+	<script>
+		$(document).ready(function() {
+			$('#lp1').linkPreview();
+
+			// changing placeholder
+			$('#lp2').linkPreview({placeholder: "Second Field"});
+			
+			// bind to a tag the results brought from database
+			$('#retrieveFromDatabase').linkPreviewRetrieve();
+		});
+	</script>
+```
+
+## Result Format
+
+```json
+	{  
+	   "title":"title",
+	   "url":"original url",
+	   "pageUrl":"page url",
+	   "canonicalUrl":"cannonical url",
+	   "description":"description",
+	   "images":[
+
+	   ],
+	   "video":"yes|no",
+	   "videoIframe":"video iframe if it is video"
+	}
+```
+
+
+
+## Parameters
+
+|     option    |    default value    | possible values |                  function                  |
+|:-------------:|:-------------------:|:---------------:|:------------------------------------------:|
+| imageQuantity |          -1         |   any integer   | set the max amount of images to be brought |
+|  placeholder  | What's in your mind |    any string   |       set the placeholder of textarea      |
+
+
+
+## Important
+Make sure the library php5-curl is installed and enabled on the server whether local or at webspace.

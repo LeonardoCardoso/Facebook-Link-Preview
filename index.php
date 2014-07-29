@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Link Preview - LeoCardz</title>
-		<link rel="stylesheet" class="cssStatics" type="text/css" href="css/stylesheet.css" />
-		<link rel="stylesheet" class="cssButtons" type="text/css" href="css/linkPreview.css" />
-		<script type="text/javascript" src="js/jquery.js" ></script>
+		<link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
+		<link rel="stylesheet" type="text/css" href="css/linkPreview.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script type="text/javascript" src="js/linkPreview.js" ></script>
 		<script type="text/javascript" src="js/linkPreviewRetrieve.js" ></script>
 		<script>
