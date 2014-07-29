@@ -93,6 +93,6 @@ If you are using this lib, let me know contacting me at contact@leocardz.com the
 License
 =================================
 
-Copyright (c) 2014 Leonardo Cardoso (http://leocardz.com)
-Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
-and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+	Copyright (c) 2014 Leonardo Cardoso (http://leocardz.com)
+	Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+	and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
