@@ -83,4 +83,19 @@ Just create your own textarea (or multiple textareas) and bind it to jQuery like
 
 
 ## Important
-Make sure the library php5-curl is installed and enabled on the server whether local or at webspace.
+=======
+Make sure the library php5-curl is installed and enabled on the server whether local or at webspace. 
+
+
+
+Contact
+=================================
+If you are using this lib, let me know contacting me at contact@leocardz.com then I add your app here in a list
+
+
+License
+=================================
+
+	Copyright (c) 2014 Leonardo Cardoso (http://leocardz.com)
+	Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+	and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
