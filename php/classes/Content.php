@@ -80,6 +80,9 @@ class Content {
 
         $images = "";
         for ($i = 0; $i < count($content); $i++) {
+            if (!($size = @getimagesize($content[$i]))) {
+                continue;
+            }
             $size = getimagesize($content[$i]);
             if ($size[0] > 100 && $size[1] > 15) {// avoids getting very small images
                 $images .= $content[$i] . "|";
