@@ -139,12 +139,12 @@
         }
 
 
-        $('#text_' + selector).keyup(function(e) {
+        var crawlText = function() {
 
             allowPosting = true;
 
-            if ((e.which === 13 || e.which === 32 || e.which === 17) && trim($(this).val()) !== "") {
-                text = " " + $('#text_' + selector).val();
+            text = " " + $('#text_' + selector).val();
+            if (trim(text) !== "") {
                 video = "no";
                 videoPlay = "";
                 if (block === false && urlRegex.test(text)) {
@@ -390,6 +390,20 @@
                 }
             }
         });
+        
+        $('#text_' + selector).bind({
+            paste: function() {
+                setTimeout(function() {
+                    crawlText();
+                }, 100);
+            },
+            keyup: function(e) {
+                if ((e.which === 13 || e.which === 32 || e.which === 17)) {
+                    crawlText();
+                }
+            }
+        });
+
 
         $('#postPreviewButton_' + selector).click(function() {
 
