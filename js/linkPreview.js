@@ -389,7 +389,7 @@
                     }, "json");
                 }
             }
-        });
+        };
         
         $('#text_' + selector).bind({
             paste: function() {
