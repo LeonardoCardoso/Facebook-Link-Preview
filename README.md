@@ -75,7 +75,7 @@ Just create your own textarea (or multiple textareas) and bind it to jQuery like
 
 |     option    |    default value    | possible values |                  function                  |
 |:-------------:|:-------------------:|:---------------:|:------------------------------------------:|
-| imageQuantity |          -1         |   any integer   | set the max amount of images to be brought |
+| imageQuantity |          -1         |   any integer   | set the max amount of images to be brought (-1 for illimited) |
 |  placeholder  | What's in your mind |    any string   |       set the placeholder of textarea      |
 
 
