@@ -449,6 +449,10 @@
                         url: hrefUrl,
                         description: $('#previewSpanDescription_' + selector).html(),
                         iframe: videoIframe
+                    }, function(response){
+
+                        alert(response);
+
                     });
 
                     $('#preview_' + selector).fadeOut("fast", function() {
