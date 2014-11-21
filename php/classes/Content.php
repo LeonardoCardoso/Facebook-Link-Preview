@@ -11,9 +11,11 @@
 
 include_once "Regex.php";
 
-class Content {
+class Content
+{
 
-    static function crawlCode($text) {
+    static function crawlCode($text)
+    {
         $contentSpan = Content::getTagContent("span", $text);
         $contentParagraph = Content::getTagContent("p", $text);
         $contentDiv = Content::getTagContent("div", $text);
@@ -26,14 +28,8 @@ class Content {
         return $content;
     }
 
-    static function isImage($url) {
-        if (preg_match(Regex::$imagePrefixRegex, $url))
-            return true;
-        else
-            return false;
-    }
-
-    static function getTagContent($tag, $string) {
+    static function getTagContent($tag, $string)
+    {
         $pattern = "/<$tag(.*?)>(.*?)<\/$tag>/i";
 
         preg_match_all($pattern, $string, $matches);
@@ -52,7 +48,16 @@ class Content {
         return str_replace("&nbsp;", "", $content);
     }
 
-    static function getImages($text, $url, $imageQuantity) {
+    static function isImage($url)
+    {
+        if (preg_match(Regex::$imagePrefixRegex, $url))
+            return true;
+        else
+            return false;
+    }
+
+    static function getImages($text, $url, $imageQuantity)
+    {
         $content = array();
         if (preg_match_all(Regex::$imageRegex, $text, $matching)) {
 
@@ -94,15 +99,82 @@ class Content {
         return substr($images, 0, -1);
     }
 
-    static function separeMetaTagsContent($raw) {
-        preg_match(Regex::$contentRegex1, $raw, $match);
-        if(count($match) == 0){
-            preg_match(Regex::$contentRegex2, $raw, $match);
+    static function getMetaTags($contents)
+    {
+
+        $result = false;
+
+        if (isset($contents)) {
+
+            $list = array(
+                "UTF-8",
+                "EUC-CN",
+                "EUC-JP",
+                "EUC-KR",
+                'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-3', 'ISO-8859-4', 'ISO-8859-5',
+                'ISO-8859-6', 'ISO-8859-7', 'ISO-8859-8', 'ISO-8859-9', 'ISO-8859-10',
+                'ISO-8859-13', 'ISO-8859-14', 'ISO-8859-15', 'ISO-8859-16',
+                'Windows-1251', 'Windows-1252', 'Windows-1254',
+            );
+
+            $encoding_check = mb_detect_encoding($contents, $list, true);
+            $encoding = ($encoding_check === false) ? "UTF-8" : $encoding_check;
+
+            $metaTags = Content::getMetaTagsEncoding($contents, $encoding);
+
+
+            $result = $metaTags;
         }
-        return $match[1];
+
+        return $result;
     }
 
-    static function getMetaTags($contents) {
+    static function getMetaTagsEncoding($contents, $encoding)
+    {
+        $result = false;
+        $metaTags = array("url" => "", "title" => "", "description" => "", "image" => "");
+
+        if (isset($contents)) {
+
+            $doc = new DOMDocument('1.0', 'utf-8');
+            $page = mb_convert_encoding($contents, 'HTML-ENTITIES', $encoding);
+            @$doc->loadHTML($page);
+
+            $metas = $doc->getElementsByTagName('meta');
+
+            for ($i = 0; $i < $metas->length; $i++) {
+                $meta = $metas->item($i);
+                if ($meta->getAttribute('name') == 'description')
+                    $metaTags["description"] = $meta->getAttribute('content');
+                if ($meta->getAttribute('name') == 'keywords')
+                    $metaTags["keywords"] = $meta->getAttribute('content');
+                if ($meta->getAttribute('property') == 'og:title')
+                    $metaTags["title"] = $meta->getAttribute('content');
+                if ($meta->getAttribute('property') == 'og:image')
+                    $metaTags["image"] = $meta->getAttribute('content');
+                if ($meta->getAttribute('property') == 'og:description')
+                    $metaTags["og_description"] = $meta->getAttribute('content');
+                if ($meta->getAttribute('property') == 'og:url')
+                    $metaTags["url"] = $meta->getAttribute('content');
+            }
+
+            if (!empty($metaTags["og_description"])) {
+                $metaTags["description"] = $metaTags["og_description"];
+            }
+
+            if (empty($metaTags["title"])) {
+                $nodes = $doc->getElementsByTagName('title');
+                $metaTags["title"] = $nodes->item(0)->nodeValue;
+            }
+
+            $result = $metaTags;
+        }
+        return $result;
+    }
+
+    /*
+    static function getMetaTags($contents)
+    {
         $result = false;
         $metaTags = array("url" => "", "title" => "", "description" => "", "image" => "");
 
@@ -119,15 +191,25 @@ class Content {
                 else if ((strpos($value, 'property="og:description"') !== false || strpos($value, "property='og:description'") !== false) || (strpos($value, 'name="description"') !== false || strpos($value, "name='description'") !== false))
                     $metaTags["description"] = Content::separeMetaTagsContent($value);
                 else if ((strpos($value, 'property="og:image"') !== false || strpos($value, "property='og:image'") !== false) || (strpos($value, 'name="image"') !== false || strpos($value, "name='image'") !== false))
-                    $metaTags["image"] =  Content::separeMetaTagsContent($value);
+                    $metaTags["image"] = Content::separeMetaTagsContent($value);
             }
 
             $result = $metaTags;
         }
         return $result;
+    } */
+
+    static function separeMetaTagsContent($raw)
+    {
+        preg_match(Regex::$contentRegex1, $raw, $match);
+        if (count($match) == 0) {
+            preg_match(Regex::$contentRegex2, $raw, $match);
+        }
+        return $match[1];
     }
 
-    static function extendedTrim($content) {
+    static function extendedTrim($content)
+    {
         return trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $content))));
     }
 }
