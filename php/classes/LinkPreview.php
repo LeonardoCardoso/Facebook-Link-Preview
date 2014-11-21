@@ -120,6 +120,8 @@ class LinkPreview
                     $urlData = $this->getPage($pageUrl);
                 }
 
+                $urlData = Content::stripIrrelevantTags($urlData);
+
                 $pageUrl = $finalUrl = $urlData["url"];
                 $raw = $urlData["content"];
                 $header = $urlData["header"];

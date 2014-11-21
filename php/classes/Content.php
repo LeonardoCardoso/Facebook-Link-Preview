@@ -211,4 +211,11 @@ class Content
     {
         return trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $content))));
     }
+
+    static function stripIrrelevantTags($content)
+    {
+        $tags = array('style', 'script');
+        $content = preg_replace('#<(' . implode('|', $tags) . ')>.*?</\1>#s', '', $content);
+        return $content;
+    }
 }
