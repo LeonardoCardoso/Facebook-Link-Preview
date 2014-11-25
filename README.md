@@ -1,6 +1,12 @@
 Facebook-Like Link Preview
 ==========================
 
+Developed by <a href='https://github.com/LeonardoCardoso' target='_blank'>@LeonardoCardoso</a>. 
+
+Follow <a href='https://twitter.com/lc_link_preview' target='_blank'>@lc_link_preview</a> on Twitter to get updates of what sites the people are successfully previewing around the globe.
+
+## How this works
+
 The algorithm keeps tracking what you are typing in the status field and through regular expressions identifies a url. Thereafter, the text is in the field is passed to PHP that does all the work to analyze all the source code of the url found. If you enter more than one url, it will consider that the first one is the more relevant and it will create a preview.
 Once the source code of the url is obtained, regular expressions begin to seek out and capture relevant informations on it. These informations is basically the title page, the images contained therein, and a brief description of the content covered in the page.
 
@@ -87,7 +93,10 @@ Make sure the library php5-curl is installed and enabled on the server whether l
 
 Contact
 =================================
-If you are using this lib, let me know contacting me at contact@leocardz.com then I add your app here in a list
+
+Twitter: <a href='https://twitter.com/theleocardz' target='_blank'>@TheLeoCardz</a>
+
+Email: contact@leocardz.com
 
 
 License
