@@ -23,55 +23,6 @@ class LinkPreview
     {
     }
 
-    function getPage($url)
-    {
-        $res = array();
-        $options = array(CURLOPT_RETURNTRANSFER => true, // return web page
-            CURLOPT_HEADER => false, // do not return headers
-            CURLOPT_FOLLOWLOCATION => true, // follow redirects
-            CURLOPT_USERAGENT => "leocardz", // who am i
-            CURLOPT_AUTOREFERER => true, // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120, // timeout on connect
-            CURLOPT_TIMEOUT => 120, // timeout on response
-            CURLOPT_MAXREDIRS => 10, // stop after 10 redirects
-        );
-        $ch = curl_init($url);
-        curl_setopt_array($ch, $options);
-        $content = curl_exec($ch);
-        $header = curl_getinfo($ch);
-        curl_close($ch);
-
-        $hrd = $header["content_type"];
-        header("Content-Type: " . $hrd, true);
-
-        $res['content'] = $content;
-        $res['url'] = $header['url'];
-        $res['header'] = $hrd;
-
-        return $res;
-    }
-
-    function getMedia($pageUrl)
-    {
-        $media = array();
-        if (strpos($pageUrl, "youtube.com") !== false) {
-            $media = Media::mediaYoutube($pageUrl);
-        } else if (strpos($pageUrl, "vimeo.com") !== false) {
-            $media = Media::mediaVimeo($pageUrl);
-        } else if (strpos($pageUrl, "metacafe.com") !== false) {
-            $media = Media::mediaMetacafe($pageUrl);
-        } else if (strpos($pageUrl, "dailymotion.com") !== false) {
-            $media = Media::mediaDailymotion($pageUrl);
-        } else if (strpos($pageUrl, "collegehumor.com") !== false) {
-            $media = Media::mediaCollegehumor($pageUrl);
-        } else if (strpos($pageUrl, "blip.tv") !== false) {
-            $media = Media::mediaBlip($pageUrl);
-        } else if (strpos($pageUrl, "funnyordie.com") !== false) {
-            $media = Media::mediaFunnyordie($pageUrl);
-        }
-        return $media;
-    }
-
     function joinAll($matching, $number, $url, $content)
     {
         for ($i = 0; $i < count($matching[$number]); $i++) {
@@ -200,6 +151,57 @@ class LinkPreview
 
         }
         return null;
+    }
+
+    function getPage($url)
+    {
+        $res = array();
+        $options = array(CURLOPT_RETURNTRANSFER => true, // return web page
+            CURLOPT_HEADER => false, // do not return headers
+            CURLOPT_FOLLOWLOCATION => true, // follow redirects
+            CURLOPT_USERAGENT => "leocardz", // who am i
+            CURLOPT_AUTOREFERER => true, // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120, // timeout on connect
+            CURLOPT_TIMEOUT => 120, // timeout on response
+            CURLOPT_MAXREDIRS => 10, // stop after 10 redirects
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, $options);
+        $content = curl_exec($ch);
+        $header = curl_getinfo($ch);
+        curl_close($ch);
+
+        $hrd = $header["content_type"];
+        header("Content-Type: " . $hrd, true);
+
+        $res['content'] = $content;
+        $res['url'] = $header['url'];
+        $res['header'] = $hrd;
+
+        return $res;
+    }
+
+    function getMedia($pageUrl)
+    {
+        $media = array();
+        if (strpos($pageUrl, "youtube.com") !== false) {
+            $media = Media::mediaYoutube($pageUrl);
+        } else if (strpos($pageUrl, "vimeo.com") !== false) {
+            $media = Media::mediaVimeo($pageUrl);
+        } else if (strpos($pageUrl, "vine.co") !== false) {
+            $media = Media::mediaVine($pageUrl);
+        } else if (strpos($pageUrl, "metacafe.com") !== false) {
+            $media = Media::mediaMetacafe($pageUrl);
+        } else if (strpos($pageUrl, "dailymotion.com") !== false) {
+            $media = Media::mediaDailymotion($pageUrl);
+        } else if (strpos($pageUrl, "collegehumor.com") !== false) {
+            $media = Media::mediaCollegehumor($pageUrl);
+        } else if (strpos($pageUrl, "blip.tv") !== false) {
+            $media = Media::mediaBlip($pageUrl);
+        } else if (strpos($pageUrl, "funnyordie.com") !== false) {
+            $media = Media::mediaFunnyordie($pageUrl);
+        }
+        return $media;
     }
 
 }
