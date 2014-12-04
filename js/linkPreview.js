@@ -5,8 +5,8 @@
  *
  * Version: 1.3.0
  */
-(function($) {
-    $.fn.linkPreview = function(options) {
+(function ($) {
+    $.fn.linkPreview = function (options) {
 
         var defaults = {
             placeholder: "What's in your mind",
@@ -46,6 +46,7 @@
         var firstPosting = false;
         var nT = false;
         var imageId = "";
+        var imageIdArray = "";
         var pTP = "";
         var pDP = "";
         var fancyUrl = '';
@@ -53,14 +54,14 @@
         var isCrawling = false;
 
         var textText = "";
-        $('#text_' + selector).focus(function() {
+        $('#text_' + selector).focus(function () {
             if (trim($('#text_' + selector).val()) === textText) {
                 $(this).val('');
                 $(this).css({
                     'color': 'black'
                 });
             }
-        }).blur(function() {
+        }).blur(function () {
             if (trim($('#text_' + selector).val()) === "") {
                 $(this).val(textText);
                 $(this).css({
@@ -139,9 +140,14 @@
         }
 
 
-        var crawlText = function() {
+        var crawlText = function () {
 
             allowPosting = true;
+            block = false;
+            hrefUrl = '';
+            fancyUrl = '';
+            images = '';
+            video = '';
 
             text = " " + $('#text_' + selector).val();
             if (trim(text) !== "") {
@@ -160,7 +166,7 @@
                     $.post('php/textCrawler.php', {
                         text: text,
                         imagequantity: opts.imageQuantity
-                    }, function(answer) {
+                    }, function (answer) {
 
                         if (answer.url === null)
                             answer.url = "";
@@ -220,7 +226,7 @@
 
                             if (firstPosted === false) {
                                 firstPosted = true;
-                                $('#previewPreviousImg_' + selector).click(function() {
+                                $('#previewPreviousImg_' + selector).click(function () {
                                     if (images.length > 1) {
                                         photoNumber = parseInt($('#photoNumber_' + selector).val());
                                         $('#imagePreview_' + selector + '_' + photoNumber).css({
@@ -243,7 +249,7 @@
                                         $('#photoNumbers_' + selector).html(parseInt(photoNumber + 1) + " of " + images.length);
                                     }
                                 });
-                                $('#previewNextImg_' + selector).click(function() {
+                                $('#previewNextImg_' + selector).click(function () {
                                     if (images.length > 1) {
                                         photoNumber = parseInt($('#photoNumber_' + selector).val());
                                         $('#imagePreview_' + selector + '_' + photoNumber).css({
@@ -287,17 +293,17 @@
                         }
                         if (nT === false) {
                             nT = true;
-                            $('#noThumbDiv_' + selector).click(function() {
+                            $('#noThumbDiv_' + selector).click(function () {
                                 var inputCheckbox = $(this).find('input[type=checkbox]');
                                 var noThumb = inputCheckbox.prop('checked');
                                 noThumbAction(noThumb, inputCheckbox);
                             });
                         }
-                        $('#noThumb_' + selector).click(function() {
+                        $('#noThumb_' + selector).click(function () {
                             var noThumb = $(this).prop("checked");
                             noThumbAction(noThumb, $(this));
                         });
-                        $('#previewSpanTitle_' + selector).click(function() {
+                        $('#previewSpanTitle_' + selector).click(function () {
                             if (blockTitle === false) {
                                 blockTitle = true;
                                 $('#previewSpanTitle_' + selector).hide();
@@ -306,13 +312,13 @@
                                 $('#previewInputTitle_' + selector).focus().select();
                             }
                         });
-                        $('#previewInputTitle_' + selector).blur(function() {
+                        $('#previewInputTitle_' + selector).blur(function () {
                             blockTitle = false;
                             $('#previewSpanTitle_' + selector).html($('#previewInputTitle_' + selector).val());
                             $('#previewSpanTitle_' + selector).show();
                             $('#previewInputTitle_' + selector).hide();
                         });
-                        $('#previewInputTitle_' + selector).keypress(function(e) {
+                        $('#previewInputTitle_' + selector).keypress(function (e) {
                             if (e.which === 13) {
                                 blockTitle = false;
                                 $('#previewSpanTitle_' + selector).html($('#previewInputTitle_' + selector).val());
@@ -320,7 +326,7 @@
                                 $('#previewInputTitle_' + selector).hide();
                             }
                         });
-                        $('#previewSpanDescription_' + selector).click(function() {
+                        $('#previewSpanDescription_' + selector).click(function () {
                             if (blockDescription === false) {
                                 blockDescription = true;
                                 $('#previewSpanDescription_' + selector).hide();
@@ -329,13 +335,13 @@
                                 $('#previewInputDescription_' + selector).focus().select();
                             }
                         });
-                        $('#previewInputDescription_' + selector).blur(function() {
+                        $('#previewInputDescription_' + selector).blur(function () {
                             blockDescription = false;
                             $('#previewSpanDescription_' + selector).html($('#previewInputDescription_' + selector).val());
                             $('#previewSpanDescription_' + selector).show();
                             $('#previewInputDescription_' + selector).hide();
                         });
-                        $('#previewInputDescription_' + selector).keypress(function(e) {
+                        $('#previewInputDescription_' + selector).keypress(function (e) {
                             if (e.which === 13) {
                                 blockDescription = false;
                                 $('#previewSpanDescription_' + selector).html($('#previewInputDescription_' + selector).val());
@@ -343,33 +349,33 @@
                                 $('#previewInputDescription_' + selector).hide();
                             }
                         });
-                        $('#previewSpanTitle_' + selector).mouseover(function() {
+                        $('#previewSpanTitle_' + selector).mouseover(function () {
                             $('#previewSpanTitle_' + selector).css({
                                 "background-color": "#ff9"
                             });
                         });
-                        $('#previewSpanTitle_' + selector).mouseout(function() {
+                        $('#previewSpanTitle_' + selector).mouseout(function () {
                             $('#previewSpanTitle_' + selector).css({
                                 "background-color": "transparent"
                             });
                         });
-                        $('#previewSpanDescription_' + selector).mouseover(function() {
+                        $('#previewSpanDescription_' + selector).mouseover(function () {
                             $('#previewSpanDescription_' + selector).css({
                                 "background-color": "#ff9"
                             });
                         });
-                        $('#previewSpanDescription_' + selector).mouseout(function() {
+                        $('#previewSpanDescription_' + selector).mouseout(function () {
                             $('#previewSpanDescription_' + selector).css({
                                 "background-color": "transparent"
                             });
                         });
-                        $('#closePreview_' + selector).click(function() {
+                        $('#closePreview_' + selector).click(function () {
                             block = false;
                             hrefUrl = '';
                             fancyUrl = '';
                             images = '';
                             video = '';
-                            $('#preview_' + selector).fadeOut("fast", function() {
+                            $('#preview_' + selector).fadeOut("fast", function () {
                                 $('#text_' + selector).css({
                                     "border": "1px solid #b3b3b3",
                                     "border-bottom": "1px solid #e6e6e6"
@@ -390,14 +396,14 @@
                 }
             }
         };
-        
+
         $('#text_' + selector).bind({
-            paste: function() {
-                setTimeout(function() {
+            paste: function () {
+                setTimeout(function () {
                     crawlText();
                 }, 100);
             },
-            keyup: function(e) {
+            keyup: function (e) {
                 if ((e.which === 13 || e.which === 32 || e.which === 17)) {
                     crawlText();
                 }
@@ -405,7 +411,7 @@
         });
 
 
-        $('#postPreviewButton_' + selector).click(function() {
+        $('#postPreviewButton_' + selector).click(function () {
 
             imageId = "";
             pTP = "";
@@ -418,19 +424,19 @@
                 $.get('php/highlightUrls.php', {
                     text: text,
                     description: description
-                }, function(urls) {
+                }, function (urls) {
                     if ($('#noThumb_' + selector).prop("checked") || images.length === 0) {
                         contentWidth = 495;
                         leftSideContent = "";
                     } else if (images || video) {
                         if (video === "yes") {
                             var pattern = /id="(.+?)"/i;
-                            imageId = videoIframe.match(pattern);
-                            imageId = imageId[1];
+                            imageIdArray = videoIframe.match(pattern);
+                            imageId = imageIdArray[1];
                             pTP = "pTP" + imageId;
                             pDP = "pDP" + imageId;
-                            imageId = "img" + imageId;
-                            image = "<img id='" + imageId + "' src='" + $('#imagePreview_' + selector + '_' + photoNumber).prop("src") + "' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
+                            var imageIdPrefixed = "img" + imageId;
+                            image = "<img id='" + imageIdPrefixed + "' src='" + $('#imagePreview_' + selector + '_' + photoNumber).prop("src") + "' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
                             videoPlay = '<span class="videoPostPlay"></span>';
                             leftSideContent = image + videoPlay;
                         } else {
@@ -449,13 +455,22 @@
                         url: hrefUrl,
                         description: $('#previewSpanDescription_' + selector).html(),
                         iframe: videoIframe
-                    }, function(response){
+                    }, function (response) {
 
                         // alert(response);
 
                     });
 
-                    $('#preview_' + selector).fadeOut("fast", function() {
+                    $('#preview_' + selector).fadeOut("fast", function () {
+
+                        // Vine video needs to be preloaded
+                        if (hrefUrl.indexOf("vine.co") != -1) {
+                            setTimeout(function () {
+                                $('#' + imageId).hide();
+                            }, 50);
+
+                        }
+
                         $('#text_' + selector).css({
                             "border": "1px solid #b3b3b3",
                             "border-bottom": "1px solid #e6e6e6"
@@ -466,27 +481,19 @@
                         $('#previewUrl_' + selector).html("");
                         $('#previewDescription_' + selector).html("");
                         $(content).hide().prependTo('#previewPostedList_' + selector).fadeIn("fast");
-                        $(".imgIframe").click(function() {
+                        $(".imgIframe").click(function () {
                             iframenize($(this));
                         });
-                        $(".videoPostPlay").click(function() {
+                        $(".videoPostPlay").click(function () {
                             iframenize($(this).parent().find(".imgIframe"));
                         });
 
                     });
 
-
-
-                    block = false;
-                    hrefUrl = '';
-                    fancyUrl = '';
-                    images = '';
-                    video = '';
                 }, "json");
                 text = "";
             }
         });
-
 
 
     };
