@@ -14,7 +14,7 @@ include_once "Regex.php";
 class Content
 {
 
-    static function crawlCode($text)
+    public static function crawlCode($text)
     {
         $contentSpan = Content::getTagContent("span", $text);
         $contentParagraph = Content::getTagContent("p", $text);
@@ -28,7 +28,7 @@ class Content
         return $content;
     }
 
-    static function getTagContent($tag, $string)
+    public static function getTagContent($tag, $string)
     {
         $pattern = "/<$tag(.*?)>(.*?)<\/$tag>/i";
 
@@ -48,15 +48,12 @@ class Content
         return str_replace("&nbsp;", "", $content);
     }
 
-    static function isImage($url)
+    public static function isImage($url)
     {
-        if (preg_match(Regex::$imagePrefixRegex, $url))
-            return true;
-        else
-            return false;
+        return preg_match(Regex::$imagePrefixRegex, $url);
     }
 
-    static function getImages($text, $url, $imageQuantity)
+    public static function getImages($text, $url, $imageQuantity)
     {
         $content = array();
         if (preg_match_all(Regex::$imageRegex, $text, $matching)) {
@@ -99,7 +96,7 @@ class Content
         return substr($images, 0, -1);
     }
 
-    static function getMetaTags($contents)
+    public static function getMetaTags($contents)
     {
 
         $result = false;
@@ -129,7 +126,7 @@ class Content
         return $result;
     }
 
-    static function getMetaTagsEncoding($contents, $encoding)
+    public static function getMetaTagsEncoding($contents, $encoding)
     {
         $result = false;
         $metaTags = array("url" => "", "title" => "", "description" => "", "image" => "");
@@ -172,7 +169,7 @@ class Content
     }
 
     /*
-    static function getMetaTags($contents)
+    public static function getMetaTags($contents)
     {
         $result = false;
         $metaTags = array("url" => "", "title" => "", "description" => "", "image" => "");
@@ -198,7 +195,7 @@ class Content
         return $result;
     } */
 
-    static function separeMetaTagsContent($raw)
+    public static function separeMetaTagsContent($raw)
     {
         preg_match(Regex::$contentRegex1, $raw, $match);
         if (count($match) == 0) {
@@ -207,12 +204,12 @@ class Content
         return $match[1];
     }
 
-    static function extendedTrim($content)
+    public static function extendedTrim($content)
     {
         return trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $content))));
     }
 
-    static function stripIrrelevantTags($content)
+    public static function stripIrrelevantTags($content)
     {
         $tags = array('style', 'script');
         $content = preg_replace('#<(' . implode('|', $tags) . ')>.*?</\1>#s', '', $content);
