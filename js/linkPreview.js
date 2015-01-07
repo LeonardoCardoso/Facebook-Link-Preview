@@ -52,6 +52,8 @@
         var fancyUrl = '';
         var allowPosting = false;
         var isCrawling = false;
+        var defaultTitle = "Enter a title";
+        var defaultDescription = "Enter a description";
 
         var textText = "";
         $('#text_' + selector).focus(function () {
@@ -173,9 +175,9 @@
                         if (answer.pageUrl === null)
                             answer.pageUrl = "";
                         if (answer.title === null || answer.title === "")
-                            answer.title = "Enter a title";
+                            answer.title = defaultTitle;
                         if (answer.description === null || answer.description === "")
-                            answer.description = "Enter a description";
+                            answer.description = defaultDescription;
                         if (answer.canonicalUrl === null)
                             answer.canonicalUrl = "";
                         if (answer.images === null)
@@ -444,6 +446,16 @@
                             leftSideContent = '<a href="' + hrefUrl + '" target="_blank">' + image + '</a>';
                         }
                     }
+
+                    if (title.indexOf(defaultTitle) != -1) {
+                        title = title.replace(defaultTitle, "");
+                    }
+
+                    if (urls.description.indexOf(defaultDescription) != -1) {
+                        urls.description = replaceAll(defaultDescription, '', urls.description);
+                    }
+
+
                     content = '<div class="previewPosted">' + '<div class="previewTextPosted">' + urls.urls + '</div>' + videoIframe + '<div class="previewImagesPosted">' + '<div class="previewImagePosted">' + leftSideContent + '</div>' + '</div>' + '<div class="previewContentPosted">' + '<div class="previewTitlePosted" id="' + pTP + '" style="width: ' + contentWidth + 'px" ><a href="' + hrefUrl + '" target="_blank">' + title + '</a></div>' + '<div class="previewUrlPosted">' + fancyUrl + '</div>' + '<div class="previewDescriptionPosted" id="' + pDP + '" style="width: ' + contentWidth + 'px" >' + urls.description + '</div>' + '</div>' + '<div style="clear: both"></div>' + '</div>';
 
                     /** Database insert */
@@ -495,6 +507,9 @@
             }
         });
 
+        function replaceAll(find, replace, str) {
+            return str.replace(new RegExp(find, 'g'), replace);
+        }
 
     };
 })(jQuery);
