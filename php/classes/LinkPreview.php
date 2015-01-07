@@ -101,6 +101,13 @@ class LinkPreview
                     $description = Content::crawlCode($raw);
                 }
 
+                if(Content::isJson($title)){
+                    $title = "";
+                }
+                if(Content::isJson($description)){
+                    $description = "";
+                }
+
                 $media = $this->getMedia($pageUrl);
                 $images = count($media) == 0 ? Content::extendedTrim($metaTags["image"]) : $media[0];
                 $videoIframe = $media[1];
@@ -144,8 +151,10 @@ class LinkPreview
             if ($flagged) {
                 $answer = array("title" => $title, "url" => $finalLink, "pageUrl" => $finalUrl, "canonicalUrl" => Url::canonicalPage($pageUrl), "description" => $description,
                     "images" => $images, "video" => $video, "videoIframe" => $videoIframe);
+
                 return Json::jsonSafe($answer, $header);
             } else {
+
                 return $result_json;
             }
 

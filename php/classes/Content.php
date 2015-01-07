@@ -65,6 +65,7 @@ class Content
                 $src = "";
                 $pathCounter = substr_count($matching[0][$i], "../");
                 preg_match(Regex::$srcRegex, $matching[0][$i], $imgSrc);
+
                 $imgSrc = Url::canonicalImgSrc($imgSrc[2]);
                 if (!preg_match(Regex::$httpRegex, $imgSrc)) {
                     $src = Url::getImageUrl($pathCounter, Url::canonicalLink($imgSrc, $url));
@@ -89,13 +90,14 @@ class Content
                 continue;
             }
             $size = getimagesize($content[$i]);
-            if ($size[0] > 100 && $size[1] > 15) {// avoids getting very small images
+            if ($size[0] > 40 && $size[1] > 15) {// avoids getting very small images
                 $images .= $content[$i] . "|";
                 $maxImages--;
                 if ($maxImages == 0)
                     break;
             }
         }
+
         return substr($images, 0, -1);
     }
 
@@ -171,33 +173,6 @@ class Content
         return $result;
     }
 
-    /*
-    static function getMetaTags($contents)
-    {
-        $result = false;
-        $metaTags = array("url" => "", "title" => "", "description" => "", "image" => "");
-
-        if (isset($contents)) {
-
-            preg_match_all(Regex::$metaRegex, $contents, $match);
-
-            foreach ($match[1] as $value) {
-
-                if ((strpos($value, 'property="og:url"') !== false || strpos($value, "property='og:url'") !== false) || (strpos($value, 'name="url"') !== false || strpos($value, "name='url'") !== false))
-                    $metaTags["url"] = Content::separeMetaTagsContent($value);
-                else if ((strpos($value, 'property="og:title"') !== false || strpos($value, "property='og:title'") !== false) || (strpos($value, 'name="title"') !== false || strpos($value, "name='title'") !== false))
-                    $metaTags["title"] = Content::separeMetaTagsContent($value);
-                else if ((strpos($value, 'property="og:description"') !== false || strpos($value, "property='og:description'") !== false) || (strpos($value, 'name="description"') !== false || strpos($value, "name='description'") !== false))
-                    $metaTags["description"] = Content::separeMetaTagsContent($value);
-                else if ((strpos($value, 'property="og:image"') !== false || strpos($value, "property='og:image'") !== false) || (strpos($value, 'name="image"') !== false || strpos($value, "name='image'") !== false))
-                    $metaTags["image"] = Content::separeMetaTagsContent($value);
-            }
-
-            $result = $metaTags;
-        }
-        return $result;
-    } */
-
     static function separeMetaTagsContent($raw)
     {
         preg_match(Regex::$contentRegex1, $raw, $match);
@@ -210,5 +185,18 @@ class Content
     static function extendedTrim($content)
     {
         return trim(str_replace("\n", " ", str_replace("\t", " ", preg_replace("/\s+/", " ", $content))));
+    }
+
+    static function isJson($string)
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    static function stripIrrelevantTags($content)
+    {
+        $tags = array('style', 'script');
+        $content = preg_replace('#<(' . implode('|', $tags) . ')>.*?</\1>#s', '', $content);
+        return $content;
     }
 }
