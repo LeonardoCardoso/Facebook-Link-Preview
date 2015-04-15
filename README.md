@@ -60,6 +60,7 @@ Just create your own textarea (or multiple textareas) and bind it to jQuery like
 			$('#retrieveFromDatabase').linkPreviewRetrieve();
 		});
 	</script>
+	
 ```
 
 ## Result Format

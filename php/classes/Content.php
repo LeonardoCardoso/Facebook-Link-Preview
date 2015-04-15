@@ -173,7 +173,7 @@ class Content
         return $result;
     }
 
-    static function separeMetaTagsContent($raw)
+    static function separateMetaTagsContent($raw)
     {
         preg_match(Regex::$contentRegex1, $raw, $match);
         if (count($match) == 0) {
