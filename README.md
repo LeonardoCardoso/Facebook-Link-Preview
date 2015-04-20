@@ -63,6 +63,17 @@ Just create your own textarea (or multiple textareas) and bind it to jQuery like
 	
 ```
 
+4 &bull; Database
+
+To custom your database configurations, you just need to change the following values in php/classes/Database.php
+
+		$host = "localhost";
+        $user = "";
+        $password = "";
+        $database = "linkpreview";
+        
+        
+
 ## Result Format
 
 ```json
@@ -86,7 +97,6 @@ Just create your own textarea (or multiple textareas) and bind it to jQuery like
 |:-------------:|:-------------------:|:---------------:|:------------------------------------------:|
 | imageQuantity |          -1         |   any integer   | set the max amount of images to be brought (-1 for illimited) |
 |  placeholder  | What's in your mind |    any string   |       set the placeholder of textarea      |
-
 
 
 ## Important
