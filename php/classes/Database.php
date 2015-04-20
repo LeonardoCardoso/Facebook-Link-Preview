@@ -18,9 +18,7 @@ class Database
     {
         $conn = Database::connect();
 
-        $save["text"] = mysql_real_escape_string($save["text"]);
-        $save["title"] = mysql_real_escape_string($save["title"]);
-        $save["description"] = mysql_real_escape_string($save["description"]);
+        $save = array_map("mysql_real_escape_string", $save);
 
         $query = "INSERT INTO `linkpreview`.`linkpreview` (`id`, `text`, `image`, `title`, `canonicalUrl`, `url`, `description`, `iframe`)
                         VALUES (NULL, '" . $save["text"] . "', '" . $save["image"] . "', '" . $save["title"] . "', '" . $save["canonicalUrl"] . "', '" . $save["url"] . "', '" . $save["description"] . "', '" . $save["iframe"] . "')";
