@@ -1,0 +1,9 @@
+language: php
+
+before_script:
+- sudo bash tests/before_script.sh
+
+script:
+- php -v
+- apache2 -v
+# - php tests/test.php

@@ -1,6 +1,8 @@
 Facebook-Like Link Preview
 ==========================
 
+[![Build Status](https://travis-ci.org/LeonardoCardoso/Facebook-Link-Preview.svg)](https://travis-ci.org/LeonardoCardoso/Facebook-Link-Preview)
+
 Developed by <a href='https://github.com/LeonardoCardoso' target='_blank'>@LeonardoCardoso</a>. 
 
 Follow <a href='https://twitter.com/lc_link_preview' target='_blank'>@lc_link_preview</a> on Twitter to get updates of what sites the people are successfully previewing around the globe.
@@ -15,6 +17,10 @@ For mode details, visit http://lab.leocardz.com/facebook-link-preview-php--jquer
 ![Link Preview](http://leocardz.com/util/assets/images/posts/facebook-link-preview-php--jquery/linkPreviewImageTimeLapse.png)
 
 =======
+
+## HTTP Server
+
+- Apache (must support mod_php)
 
 
 ## How to added to your project
