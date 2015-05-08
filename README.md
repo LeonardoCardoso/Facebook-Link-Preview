@@ -106,9 +106,18 @@ To custom your database configurations, you just need to change the following va
 
 
 ## Important
-=======
-Make sure the library php5-curl is installed and enabled on the server whether local or at webspace. 
+Make sure the library <b>php5-curl</b> is installed and enabled on the server, either locally or remotely. 
 
+- Linux
+```bash
+$ sudo apt-get install php5-curl
+$ sudo service apache2 restart
+```
+- Mac (via [macports](https://www.macports.org/))
+```bash
+$ sudo port install php5-curl 
+$ sudo apachectl restart
+```
 
 
 Contact
