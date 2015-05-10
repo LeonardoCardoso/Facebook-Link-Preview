@@ -71,14 +71,15 @@ Just create your own textarea (or multiple textareas) and bind it to jQuery like
 
 4 &bull; Database
 
-To custom your database configurations, you just need to change the following values in php/classes/Database.php
+To custom your database configurations, you just need to change the following values in [php/classes/Database.php](https://github.com/LeonardoCardoso/Facebook-Link-Preview/blob/master/php/classes/Database.php)
 
 		$host = "localhost";
         $user = "";
         $password = "";
         $database = "linkpreview";
         
-        
+Make sure your columns are the same as those ones in [linkpreview.sql](https://github.com/LeonardoCardoso/Facebook-Link-Preview/blob/master/linkpreview.sql).        
+
 
 ## Result Format
 

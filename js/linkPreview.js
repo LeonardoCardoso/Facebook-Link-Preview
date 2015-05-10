@@ -85,37 +85,34 @@
             });
             $('#noThumb_' + selector).show();
             $('#nT_' + selector).show();
-            $('#noThumb_' + selector).prop('checked', false);
+            $('#noThumb_' + selector).removeAttr('checked');
             images = "";
         }
 
 
-        function noThumbAction(noThumb, inputCheckbox) {
-            if (!noThumb) {
-                inputCheckbox.prop('checked', true);
-                $('#imagePreview_' + selector + '_' + photoNumber).css({
-                    'display': 'none'
-                });
-                $('#whiteImage_' + selector).css({
-                    'display': 'block'
-                });
-                $('#previewContent_' + selector).css({
-                    'width': '500px'
-                });
+        function noThumbAction(inputCheckbox, src) {
+
+            var value = src === 'parent' ? !inputCheckbox.prop("checked") : inputCheckbox.prop("checked");
+
+            inputCheckbox.prop('checked', value);
+
+            $('#imagePreview_' + selector + '_' + photoNumber).css({
+                'display': !value ? 'block' : 'none'
+            });
+            $('#whiteImage_' + selector).css({
+                'display': !value ? 'none' : 'block'
+            });
+            $('#previewContent_' + selector).css({
+                'width': !value ? '355px' : '500px'
+            });
+
+            if (value === true) {
                 $('#previewButtons_' + selector).hide();
             } else {
-                inputCheckbox.prop('checked', false);
-                $('#imagePreview_' + selector + '_' + photoNumber).css({
-                    'display': 'block'
-                });
-                $('#whiteImage_' + selector).css({
-                    'display': 'none'
-                });
-                $('#previewContent_' + selector).css({
-                    'width': '355px'
-                });
                 $('#previewButtons_' + selector).show();
+
             }
+
         }
 
         function iframenize(obj) {
@@ -228,7 +225,8 @@
 
                             if (firstPosted === false) {
                                 firstPosted = true;
-                                $('#previewPreviousImg_' + selector).click(function () {
+                                $('#previewPreviousImg_' + selector).unbind('click').click(function (e) {
+                                    e.stopPropagation();
                                     if (images.length > 1) {
                                         photoNumber = parseInt($('#photoNumber_' + selector).val());
                                         $('#imagePreview_' + selector + '_' + photoNumber).css({
@@ -251,7 +249,8 @@
                                         $('#photoNumbers_' + selector).html(parseInt(photoNumber + 1) + " of " + images.length);
                                     }
                                 });
-                                $('#previewNextImg_' + selector).click(function () {
+                                $('#previewNextImg_' + selector).unbind('click').click(function (e) {
+                                    e.stopPropagation();
                                     if (images.length > 1) {
                                         photoNumber = parseInt($('#photoNumber_' + selector).val());
                                         $('#imagePreview_' + selector + '_' + photoNumber).css({
@@ -293,19 +292,16 @@
                             $('#noThumb_' + selector).hide();
                             $('#nT_' + selector).hide();
                         }
-                        if (nT === false) {
-                            nT = true;
-                            $('#noThumbDiv_' + selector).click(function () {
-                                var inputCheckbox = $(this).find('input[type=checkbox]');
-                                var noThumb = inputCheckbox.prop('checked');
-                                noThumbAction(noThumb, inputCheckbox);
-                            });
-                        }
-                        $('#noThumb_' + selector).click(function () {
-                            var noThumb = $(this).prop("checked");
-                            noThumbAction(noThumb, $(this));
+                        $('#nT_' + selector).unbind('click').click(function (e) {
+                            e.stopPropagation();
+                            noThumbAction($('#noThumb_' + selector), 'parent');
                         });
-                        $('#previewSpanTitle_' + selector).click(function () {
+                        $('#noThumb_' + selector).unbind('click').click(function (e) {
+                            e.stopPropagation();
+                            noThumbAction($(this), 'input');
+                        });
+                        $('#previewSpanTitle_' + selector).unbind('click').click(function (e) {
+                            e.stopPropagation();
                             if (blockTitle === false) {
                                 blockTitle = true;
                                 $('#previewSpanTitle_' + selector).hide();
@@ -328,7 +324,8 @@
                                 $('#previewInputTitle_' + selector).hide();
                             }
                         });
-                        $('#previewSpanDescription_' + selector).click(function () {
+                        $('#previewSpanDescription_' + selector).unbind('click').click(function (e) {
+                            e.stopPropagation();
                             if (blockDescription === false) {
                                 blockDescription = true;
                                 $('#previewSpanDescription_' + selector).hide();
@@ -371,7 +368,8 @@
                                 "background-color": "transparent"
                             });
                         });
-                        $('#closePreview_' + selector).click(function () {
+                        $('#closePreview_' + selector).unbind('click').click(function (e) {
+                            e.stopPropagation();
                             block = false;
                             hrefUrl = '';
                             fancyUrl = '';
@@ -413,7 +411,8 @@
         });
 
 
-        $('#postPreviewButton_' + selector).click(function () {
+        $('#postPreviewButton_' + selector).unbind('click').click(function (e) {
+            e.stopPropagation();
 
             imageId = "";
             pTP = "";
@@ -427,7 +426,8 @@
                     text: text,
                     description: description
                 }, function (urls) {
-                    if ($('#noThumb_' + selector).prop("checked") || images.length === 0) {
+
+                    if ($('#noThumb_' + selector).prop('checked') || images.length === 0) {
                         contentWidth = 495;
                         leftSideContent = "";
                     } else if (images || video) {
@@ -461,15 +461,15 @@
                     /** Database insert */
                     $.post('php/save.php', {
                         text: $('#text_' + selector).val(),
-                        image: $('#imagePreview_' + selector + '_' + photoNumber).prop("src"),
+                        image: $('#noThumb_' + selector).prop("checked") ? '' : $('#imagePreview_' + selector + '_' + photoNumber).prop("src"),
                         title: title,
                         canonicalUrl: fancyUrl,
                         url: hrefUrl,
                         description: $('#previewSpanDescription_' + selector).html(),
                         iframe: videoIframe
                     }, function (response) {
-                        
-                        // alert(response);
+
+                        console.log(response);
 
                     });
 
@@ -493,10 +493,12 @@
                         $('#previewUrl_' + selector).html("");
                         $('#previewDescription_' + selector).html("");
                         $(content).hide().prependTo('#previewPostedList_' + selector).fadeIn("fast");
-                        $(".imgIframe").click(function () {
+                        $(".imgIframe").unbind('click').click(function (e) {
+                            e.stopPropagation();
                             iframenize($(this));
                         });
-                        $(".videoPostPlay").click(function () {
+                        $(".videoPostPlay").unbind('click').click(function (e) {
+                            e.stopPropagation();
                             iframenize($(this).parent().find(".imgIframe"));
                         });
 
