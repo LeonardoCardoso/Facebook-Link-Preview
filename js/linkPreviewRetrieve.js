@@ -5,23 +5,30 @@
  *
  * Version: 1.3.0
  */
-(function($) {
-    $.fn.linkPreviewRetrieve = function(options) {
+(function ($) {
+    $.fn.linkPreviewRetrieve = function (options) {
 
         var selector = $(this);
 
-        $.get('php/retrieve.php', {}, function(answer) {
-            for(var i =0; i < answer.length; i++){
+        $.get('php/retrieve.php', {}, function (answer) {
+            for (var i = 0; i < answer.length; i++) {
                 var item = answer[i];
 
-                if(item.iframe != ""){
+                var contentImage = '';
+                var previewContentPostWidth = 'style="width: 500px;"';
+                if (item.image !== '') {
+                    contentImage = '<div class="previewImagesPosted"><div class="previewImagePosted"><a href="' + item.url + '" target="_blank"><img src="' + item.image + '" style="width: 130px; height: auto; float: left;"></a></div></div>';
+                    previewContentPostWidth = '';
+                }
+
+                if (item.iframe != "") {
                     iframeId = item.iframe.split("id=\"");
                     iframeId = iframeId[1].split("\"");
                     iframeId = iframeId[0];
 
-                    selector.append('<div class="previewPosted" style=""><div class="previewTextPosted"> '+item.text+' </div> '+item.iframe+' <div class="previewImagesPosted"><div class="previewImagePosted"><img id="img_'+iframeId+'" src="'+item.image+'" class="imgIframe" style="width: 130px; height: auto; float: left;"><span class="videoPostPlay"></span></div></div><div class="previewContentPosted"><div class="previewTitlePosted" id="pTP_'+iframeId+'" style="width: 355px">'+item.title+'</div><div class="previewUrlPosted">'+item.canonicalUrl+'</div><div class="previewDescriptionPosted" id="pDP_'+iframeId+'" style="width: 355px"> <span id="previewSpanDescription">'+item.description+'</textarea></div></div><div style="clear: both"></div></div>');
+                    selector.append('<div class="previewPosted" style=""><div class="previewTextPosted"> ' + item.text + ' </div> ' + item.iframe + ' <div class="previewImagesPosted"><div class="previewImagePosted"><img id="img_' + iframeId + '" src="' + item.image + '" class="imgIframe" style="width: 130px; height: auto; float: left;"><span class="videoPostPlay"></span></div></div><div class="previewContentPosted"><div class="previewTitlePosted" id="pTP_' + iframeId + '" style="width: 355px">' + item.title + '</div><div class="previewUrlPosted">' + item.canonicalUrl + '</div><div class="previewDescriptionPosted" id="pDP_' + iframeId + '" style="width: 355px"> <span id="previewSpanDescription">' + item.description + '</textarea></div></div><div style="clear: both"></div></div>');
 
-                    $(".imgIframe").click(function() {
+                    $(".imgIframe").click(function () {
                         var oldId = $(this).attr("id");
                         var currentId = oldId.substring(4);
                         pTP = "pTP_" + currentId;
@@ -29,23 +36,24 @@
                         oldId = "#" + oldId;
                         currentId = "#" + currentId;
                         $(oldId).css({
-                            'display' : 'none'
+                            'display': 'none'
                         });
                         $(currentId).css({
-                            'display' : 'block'
+                            'display': 'block'
                         });
                         $('#' + pTP).css({
-                            'width' : '495px'
+                            'width': '495px'
                         });
                         $('#' + pDP).css({
-                            'width' : '495px'
+                            'width': '495px'
                         });
                     });
 
                 }
-                else
-                    selector.append('<div class="previewPosted" style=""><div class="previewTextPosted"> '+item.text+'  </div><div class="previewImagesPosted"><div class="previewImagePosted"><a href="'+item.url+'" target="_blank"><img src="'+item.image+'" style="width: 130px; height: auto; float: left;"></a></div></div><div class="previewContentPosted"><div class="previewTitlePosted" ><a href="'+item.url+'" target="_blank"><span id="previewSpanTitle">'+item.title+'</span></a></div><div class="previewUrlPosted">'+item.canonicalUrl+'</div><div class="previewDescriptionPosted"  > <span id="previewSpanDescription">'+item.description+'</span></div><div style="clear: both"></div></div>');
-         }
+                else {
+                    selector.append('<div class="previewPosted" style=""><div class="previewTextPosted"> ' + item.text + '  </div>' + contentImage + '<div class="previewContentPosted" ' + previewContentPostWidth + '><div class="previewTitlePosted" ><a href="' + item.url + '" target="_blank"><span id="previewSpanTitle">' + item.title + '</span></a></div><div class="previewUrlPosted">' + item.canonicalUrl + '</div><div class="previewDescriptionPosted"  > <span id="previewSpanDescription">' + item.description + '</span></div><div style="clear: both"></div></div>');
+                }
+            }
         }, 'json');
 
     };
