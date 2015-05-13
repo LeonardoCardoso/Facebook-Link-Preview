@@ -14,7 +14,7 @@ Once the source code of the url is obtained, regular expressions begin to seek o
 
 For mode details, visit http://lab.leocardz.com/facebook-link-preview-php--jquery/
 
-![Link Preview](http://leocardz.com/util/assets/images/posts/facebook-link-preview-php--jquery/linkPreviewImageTimeLapse.png)
+![Link Preview](https://dl.dropboxusercontent.com/s/ocp2epovlj0w6w2/linkPreviewImageTimeLapse.png)
 
 =======
 
