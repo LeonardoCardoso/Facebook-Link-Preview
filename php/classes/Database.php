@@ -25,6 +25,23 @@ class Database
 
         mysql_query($query);
 
+        $id = mysql_insert_id($conn);
+
+        Database::close($conn);
+
+        return $id;
+    }
+
+    static function delete($delete)
+    {
+        $conn = Database::connect();
+
+        $delete = array_map("mysql_real_escape_string", $delete);
+
+        $query = "DELETE FROM `linkpreview`.`linkpreview` WHERE `id` = '" . $delete["id"] . "'";
+
+        mysql_query($query);
+
         Database::close($conn);
     }
 

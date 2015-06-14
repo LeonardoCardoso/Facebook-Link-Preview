@@ -14,17 +14,20 @@ SetUp::headers();
 
 $save = array(
     "text" => strip_tags($_POST["text"]),
-    "image" =>  strip_tags($_POST["image"]),
-    "title" =>  strip_tags($_POST["title"]),
-    "canonicalUrl" =>  strip_tags($_POST["canonicalUrl"]),
-    "url" =>  strip_tags($_POST["url"]),
-    "description" =>  strip_tags($_POST["description"]),
+    "image" => strip_tags($_POST["image"]),
+    "title" => strip_tags($_POST["title"]),
+    "canonicalUrl" => strip_tags($_POST["canonicalUrl"]),
+    "url" => strip_tags($_POST["url"]),
+    "description" => strip_tags($_POST["description"]),
     "iframe" => $_POST["iframe"],
 );
 
-Database::insert($save);
-
-echo mysql_error();
+$id = Database::insert($save);
+if ($id === null || $id === "") {
+    echo mysql_error();
+} else {
+    echo $id;
+}
 
 
 
