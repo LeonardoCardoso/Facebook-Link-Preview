@@ -473,7 +473,7 @@
 
                         content = '<div class="previewPosted" id="contentWrap' + id + '" >' + '<div class="previewTextPosted">' + urls.urls + '</div>' + videoIframe + '<div class="previewImagesPosted">' + '<div class="previewImagePosted">' + leftSideContent + '</div>' + '</div>' + '<div class="previewContentPosted">' + '<div class="previewTitlePosted" id="' + pTP + '" style="width: ' + contentWidth + 'px" ><a href="' + hrefUrl + '" target="_blank">' + title + '</a></div>' + '<div class="previewUrlPosted">' + fancyUrl + '</div>' + '<div class="previewDescriptionPosted" id="' + pDP + '" style="width: ' + contentWidth + 'px" >' + urls.description + '</div>' + '</div><div style="clear: both"><span style="color: red; cursor: pointer; float: right" id="delete_action_' + id + '" ref="' + id + '">delete</span></div></div>';
 
-                       $('#preview_' + selector).fadeOut("fast", function () {
+                        $('#preview_' + selector).fadeOut("fast", function () {
 
                             // Vine video needs to be preloaded
                             if (hrefUrl.indexOf("vine.co") != -1) {
@@ -488,6 +488,7 @@
                                 "border-bottom": "1px solid #e6e6e6"
                             });
                             $('#text_' + selector).val("");
+                            hrefUrl = "";
                             $('#previewImage_' + selector).html("");
                             $('#previewTitle_' + selector).html("");
                             $('#previewUrl_' + selector).html("");
@@ -502,16 +503,16 @@
                                 iframenize($(this).parent().find(".imgIframe"));
                             });
 
-                           $("#delete_action_" + id).click(function () {
-                               var id = $(this).attr("ref");
-                               $.post('php/delete.php', {id: id}, function (answer) {
-                                   // console.log(answer);
-                                   $("#contentWrap" + id).remove();
-                               });
-                           });
+                            $("#delete_action_" + id).click(function () {
+                                var id = $(this).attr("ref");
+                                $.post('php/delete.php', {id: id}, function (answer) {
+                                    // console.log(answer);
+                                    $("#contentWrap" + id).remove();
+                                });
+                            });
 
 
-                       });
+                        });
 
                     });
 
