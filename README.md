@@ -130,10 +130,7 @@ $ sudo apachectl restart
 
 Contact
 =================================
-
-Twitter: <a href='https://twitter.com/theleocardz' target='_blank'>@TheLeoCardz</a>
-
-Email: contact@leocardz.com
+Contact me either by Twitter [@leocardz](https://twitter.com/leocardz) or emailing me to [contact@leocardz.com](mailto:contact@leocardz.com).
 
 
 License
